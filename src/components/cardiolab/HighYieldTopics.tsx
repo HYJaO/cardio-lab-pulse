@@ -8,8 +8,9 @@ const TOPICS: Topic[] = [
       "Pressure–volume relationships across systole and diastole, mapped to heart sounds and valve events.",
     difficulty: "Foundational",
     minutes: 24,
-    taxonomy: ["high-yield", "mechanism"],
+    taxonomy: "mechanism",
     preview: "cycle",
+    href: "/topics/cardiac-cycle",
   },
   {
     title: "Heart Failure",
@@ -17,7 +18,7 @@ const TOPICS: Topic[] = [
       "Reduced versus preserved ejection fraction, compensatory neurohormonal loops and decompensation.",
     difficulty: "Intermediate",
     minutes: 32,
-    taxonomy: ["high-yield", "classic-presentation"],
+    taxonomy: "classic-presentation",
     preview: "failure",
   },
   {
@@ -26,7 +27,7 @@ const TOPICS: Topic[] = [
       "Endothelial injury to fibrous cap rupture, with the plaque timeline examiners test most.",
     difficulty: "Intermediate",
     minutes: 28,
-    taxonomy: ["mechanism", "clinical-pearl"],
+    taxonomy: "mechanism",
     preview: "plaque",
   },
   {
@@ -35,7 +36,7 @@ const TOPICS: Topic[] = [
       "First, second and third degree conduction delay read directly from the rhythm strip.",
     difficulty: "Advanced",
     minutes: 26,
-    taxonomy: ["high-yield", "usmle-trap"],
+    taxonomy: "usmle-trap",
     preview: "block",
   },
   {
@@ -44,7 +45,7 @@ const TOPICS: Topic[] = [
       "Preload, contractility and afterload shifts — and how each moves the ventricular function curve.",
     difficulty: "Foundational",
     minutes: 18,
-    taxonomy: ["mechanism", "differential"],
+    taxonomy: "mechanism",
     preview: "starling",
   },
   {
@@ -53,7 +54,7 @@ const TOPICS: Topic[] = [
       "Timing, radiation and maneuvers that separate stenosis from regurgitation at the bedside.",
     difficulty: "Advanced",
     minutes: 30,
-    taxonomy: ["classic-presentation", "differential"],
+    taxonomy: "differential",
     preview: "murmur",
   },
 ];
@@ -64,7 +65,7 @@ export function HighYieldTopics() {
       id="topics"
       eyebrow="Core Concepts"
       title="High-Yield Cardiovascular"
-      description="Every concept is tagged with a consistent taxonomy so mechanism, presentation and exam traps stay visually distinct as you study."
+      description="Every concept is tagged with a consistent taxonomy with exactly one primary tag, so mechanism, presentation and exam traps stay unambiguous. The Cardiac Cycle lab is live; the remaining labs are in development."
       className="border-y border-border/50 bg-surface/25"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
