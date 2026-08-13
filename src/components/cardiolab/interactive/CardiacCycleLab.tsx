@@ -323,7 +323,7 @@ export function CardiacCycleLab() {
             <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Valves &amp; heart sounds
             </p>
-            <svg viewBox={`0 0 ${W} 74`} className="h-16 w-full" preserveAspectRatio="none" role="img" aria-label="Valve opening timeline and heart sound markers">
+            <svg viewBox={`0 0 ${W} 74`} className="w-full" role="img" aria-label="Valve opening timeline and heart sound markers">
               <TimelineBar
                 label="Mitral"
                 y={6}
