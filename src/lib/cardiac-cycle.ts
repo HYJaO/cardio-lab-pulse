@@ -152,7 +152,7 @@ export const PHASES: Phase[] = [
 
 export function phaseAt(t: number): Phase {
   const x = ((t % 1) + 1) % 1;
-  return PHASES.find((p) => x >= p.start && x < p.end) ?? PHASES[PHASES.length - 1];
+  return PHASES.find((p) => x >= p.start && x < p.end) ?? (PHASES[PHASES.length - 1] as Phase);
 }
 
 /* ---------- waveform models ---------- */
@@ -162,15 +162,15 @@ type Key = [number, number];
 function interp(keys: Key[], t: number): number {
   const x = Math.min(0.9999, Math.max(0, t));
   for (let i = 0; i < keys.length - 1; i++) {
-    const [x0, y0] = keys[i];
-    const [x1, y1] = keys[i + 1];
-    if (x >= x0 && x <= x1) {
-      const u = x1 === x0 ? 0 : (x - x0) / (x1 - x0);
+    const a = keys[i] as Key;
+    const b = keys[i + 1] as Key;
+    if (x >= a[0] && x <= b[0]) {
+      const u = b[0] === a[0] ? 0 : (x - a[0]) / (b[0] - a[0]);
       const s = u * u * (3 - 2 * u); // smoothstep
-      return y0 + (y1 - y0) * s;
+      return a[1] + (b[1] - a[1]) * s;
     }
   }
-  return keys[keys.length - 1][1];
+  return (keys[keys.length - 1] as Key)[1];
 }
 
 const VENTRICULAR: Key[] = [
