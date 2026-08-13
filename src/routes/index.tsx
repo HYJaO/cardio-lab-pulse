@@ -1,24 +1,44 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Navbar } from "@/components/cardiolab/Navbar";
+import { Hero } from "@/components/cardiolab/Hero";
+import { LearningPath } from "@/components/cardiolab/LearningPath";
+import { HighYieldTopics } from "@/components/cardiolab/HighYieldTopics";
+import { ECGPreview } from "@/components/cardiolab/ECGPreview";
+import { AnatomyPreview } from "@/components/cardiolab/AnatomyPreview";
+import { CTA } from "@/components/cardiolab/CTA";
+import { Footer } from "@/components/cardiolab/Footer";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+const TITLE = "CardioLab — Master the Cardiovascular System";
+const DESCRIPTION =
+  "A visual, interactive cardiovascular medicine module for high-yield USMLE Step 1 preparation: anatomy, physiology, pathology, pharmacology, ECG and clinical reasoning.";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESCRIPTION },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESCRIPTION },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+    <div className="min-h-screen bg-background">
+      <Navbar />
+      <main>
+        <Hero />
+        <LearningPath />
+        <HighYieldTopics />
+        <ECGPreview />
+        <AnatomyPreview />
+        <CTA />
+      </main>
+      <Footer />
     </div>
   );
 }
