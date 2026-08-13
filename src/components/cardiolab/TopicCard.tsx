@@ -1,4 +1,5 @@
-import { Clock, Signal } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, Clock, Signal } from "lucide-react";
 import { TaxonomyBadge, type TaxonomyKind } from "./TaxonomyBadge";
 
 export type Topic = {
@@ -6,8 +7,11 @@ export type Topic = {
   description: string;
   difficulty: "Foundational" | "Intermediate" | "Advanced";
   minutes: number;
-  taxonomy: TaxonomyKind[];
+  /** Exactly one primary taxonomy tag per topic. */
+  taxonomy: TaxonomyKind;
   preview: "cycle" | "failure" | "plaque" | "block" | "starling" | "murmur";
+  /** Present only when a real interactive lesson exists. */
+  href?: "/topics/cardiac-cycle";
 };
 
 function Preview({ kind }: { kind: Topic["preview"] }) {
@@ -108,16 +112,19 @@ function Preview({ kind }: { kind: Topic["preview"] }) {
 }
 
 export function TopicCard({ topic }: { topic: Topic }) {
-  return (
-    <article className="glass-panel group flex flex-col rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-cyan/40">
+  const body = (
+    <>
       <div className="mb-5 h-24 overflow-hidden rounded-lg border border-hairline bg-background/40 p-3">
         <Preview kind={topic.preview} />
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-1.5">
-        {topic.taxonomy.map((k) => (
-          <TaxonomyBadge key={k} kind={k} />
-        ))}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <TaxonomyBadge kind={topic.taxonomy} />
+        {!topic.href && (
+          <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            In development
+          </span>
+        )}
       </div>
 
       <h3 className="text-[17px] font-semibold text-foreground">{topic.title}</h3>
@@ -134,7 +141,28 @@ export function TopicCard({ topic }: { topic: Topic }) {
           <Clock className="h-3.5 w-3.5 text-teal" />
           {topic.minutes} min
         </span>
+        {topic.href && (
+          <span className="ml-auto inline-flex items-center gap-1.5 text-cyan">
+            Open lab
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+          </span>
+        )}
       </footer>
-    </article>
+    </>
+  );
+
+  if (topic.href) {
+    return (
+      <Link
+        to={topic.href}
+        className="glass-panel group flex flex-col rounded-xl p-5 transition-all duration-300 hover:-translate-y-1 hover:border-cyan/40"
+      >
+        {body}
+      </Link>
+    );
+  }
+
+  return (
+    <article className="glass-panel flex flex-col rounded-xl p-5 opacity-80">{body}</article>
   );
 }
