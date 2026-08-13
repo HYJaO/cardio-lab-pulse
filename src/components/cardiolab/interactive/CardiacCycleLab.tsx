@@ -221,6 +221,7 @@ export function CardiacCycleLab() {
         >
           <Panel
             title="ECG · Lead II"
+            heightClass="h-20 md:h-24"
             height={H_ECG}
             x={x}
             highlight={highlight}
@@ -238,6 +239,7 @@ export function CardiacCycleLab() {
 
           <Panel
             title="Pressure (mmHg)"
+            heightClass="h-56 md:h-64"
             height={H_PRESSURE}
             x={x}
             highlight={highlight}
@@ -292,6 +294,7 @@ export function CardiacCycleLab() {
 
           <Panel
             title="Ventricular volume (mL)"
+            heightClass="h-24 md:h-28"
             height={H_VOLUME}
             x={x}
             highlight={highlight}
@@ -320,7 +323,7 @@ export function CardiacCycleLab() {
             <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Valves &amp; heart sounds
             </p>
-            <svg viewBox={`0 0 ${W} 74`} className="w-full" role="img" aria-label="Valve opening timeline and heart sound markers">
+            <svg viewBox={`0 0 ${W} 74`} className="h-16 w-full" preserveAspectRatio="none" role="img" aria-label="Valve opening timeline and heart sound markers">
               <TimelineBar
                 label="Mitral"
                 y={6}
@@ -431,6 +434,7 @@ export function CardiacCycleLab() {
 
 function Panel({
   title,
+  heightClass,
   height,
   x,
   children,
@@ -440,6 +444,7 @@ function Panel({
   scale,
 }: {
   title: string;
+  heightClass: string;
   height: number;
   x: number;
   children: React.ReactNode;
@@ -453,7 +458,7 @@ function Panel({
       <p className="mb-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
         {title}
       </p>
-      <svg viewBox={`0 0 ${W} ${height}`} className="w-full" preserveAspectRatio="none" role="img" aria-label={title}>
+      <svg viewBox={`0 0 ${W} ${height}`} className={`w-full ${heightClass}`} preserveAspectRatio="none" role="img" aria-label={title}>
         {/* phase bands */}
         {PHASES.map((p) => (
           <rect
