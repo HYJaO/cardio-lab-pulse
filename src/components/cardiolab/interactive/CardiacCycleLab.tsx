@@ -316,6 +316,7 @@ export function CardiacCycleLab() {
             x={x}
             highlight={highlight}
             hoverPhase={setHoverPhase}
+            focus={focused}
           >
             <path
               d={curvePath(ecg, { width: W, height: H_ECG, min: -0.35, max: 1.15, pad: PAD })}
@@ -334,6 +335,7 @@ export function CardiacCycleLab() {
             x={x}
             highlight={highlight}
             hoverPhase={setHoverPhase}
+            focus={focused}
             gridValues={[0, 40, 80, 120]}
             scale={{ min: P_MIN, max: P_MAX }}
           >
@@ -389,6 +391,7 @@ export function CardiacCycleLab() {
             x={x}
             highlight={highlight}
             hoverPhase={setHoverPhase}
+            focus={focused}
             gridValues={[50, 120]}
             scale={{ min: V_MIN, max: V_MAX }}
           >
