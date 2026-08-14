@@ -36,7 +36,28 @@ export function TopicPage({
   minutes,
   sections,
 }: TopicPageProps) {
+  const [active, setActive] = useState(sections[0]?.id ?? "");
+
+  useEffect(() => {
+    const nodes = sections
+      .map((s) => document.getElementById(s.id))
+      .filter((n): n is HTMLElement => n !== null);
+    if (nodes.length === 0) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visible?.target.id) setActive(visible.target.id);
+      },
+      { rootMargin: "-20% 0px -65% 0px", threshold: 0 },
+    );
+    nodes.forEach((n) => observer.observe(n));
+    return () => observer.disconnect();
+  }, [sections]);
+
   return (
+
     <div className="min-h-screen bg-background">
       <Navbar />
 
