@@ -3,7 +3,6 @@ import { TopicPage } from "@/components/cardiolab/topic/TopicPage";
 import { ContentBlock } from "@/components/cardiolab/topic/ContentBlock";
 import { ActiveRecall } from "@/components/cardiolab/topic/ActiveRecall";
 import { CardiacCycleLab } from "@/components/cardiolab/interactive/CardiacCycleLab";
-import { TaxonomyBadge } from "@/components/cardiolab/TaxonomyBadge";
 
 const TITLE = "Cardiac Cycle — Interactive Wiggers Diagram | CardioLab";
 const DESCRIPTION =
