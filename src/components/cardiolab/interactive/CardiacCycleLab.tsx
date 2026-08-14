@@ -492,7 +492,7 @@ export function CardiacCycleLab() {
             </div>
           </div>
 
-          <ValveDiagram t={t} selected={valve} onSelect={(v) => setValve(v === valve ? null : v)} />
+          <ValveDiagram t={t} selected={valve} onSelect={onValveSelect} />
         </div>
       </div>
 
