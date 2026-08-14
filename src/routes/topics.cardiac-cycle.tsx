@@ -3,7 +3,6 @@ import { TopicPage } from "@/components/cardiolab/topic/TopicPage";
 import { ContentBlock } from "@/components/cardiolab/topic/ContentBlock";
 import { ActiveRecall } from "@/components/cardiolab/topic/ActiveRecall";
 import { CardiacCycleLab } from "@/components/cardiolab/interactive/CardiacCycleLab";
-import { TaxonomyBadge } from "@/components/cardiolab/TaxonomyBadge";
 
 const TITLE = "Cardiac Cycle — Interactive Wiggers Diagram | CardioLab";
 const DESCRIPTION =
@@ -32,6 +31,41 @@ const HIGH_YIELD = [
   "Tachycardia shortens diastole first, compromising filling and coronary perfusion.",
 ];
 
+const CLINICAL_LINKS: [string, string, string][] = [
+  [
+    "S1",
+    "→ Isovolumetric contraction (t ≈ 105 ms)",
+    "Mitral and tricuspid closure the instant ventricular pressure crosses atrial pressure. Loud in mitral stenosis (valve still wide open when the ventricle contracts), soft in severe mitral regurgitation or a long PR interval.",
+  ],
+  [
+    "S2",
+    "→ Isovolumetric relaxation (t ≈ 447 ms)",
+    "Aortic then pulmonic closure as ventricular pressure falls below great-vessel pressure. Inspiration delays P2 (physiologic splitting); the same instant produces the dicrotic notch on the aortic trace.",
+  ],
+  [
+    "Systole",
+    "→ S1 to S2",
+    "Defined mechanically: from mitral closure to aortic closure — isovolumetric contraction plus rapid and reduced ejection. The QRS precedes it; electrical events are not systole.",
+  ],
+  [
+    "Diastole",
+    "→ S2 back to S1",
+    "Isovolumetric relaxation, rapid filling, diastasis, atrial systole. Left coronary perfusion happens here, which is why tachycardia and aortic stenosis threaten the subendocardium.",
+  ],
+  [
+    "Murmurs",
+    "→ Timed against the valve rows",
+    "A murmur between S1 and S2 is systolic (AV regurgitation or semilunar stenosis); between S2 and S1 it is diastolic (semilunar regurgitation or AV stenosis). Timing on the timeline is the whole diagnosis.",
+  ],
+  [
+    "Pressure–volume loop",
+    "→ Same cycle, pressure plotted against volume",
+    "The two isovolumetric phases become the vertical limbs, ejection the upper limb, filling the lower limb. Loop width is stroke volume; loop area is stroke work.",
+  ],
+];
+
+
+
 function CardiacCycleTopic() {
   return (
     <TopicPage
@@ -42,11 +76,10 @@ function CardiacCycleTopic() {
       minutes={24}
       sections={[
         {
-          id: "high-yield",
-          label: "High-yield summary",
+          id: "overview",
+          label: "Overview",
           content: (
             <ContentBlock
-              id="high-yield"
               tag="high-yield"
               title="What you must know"
               lede="The six statements examiners return to again and again."
@@ -66,14 +99,13 @@ function CardiacCycleTopic() {
           ),
         },
         {
-          id: "visualization",
-          label: "Interactive visualization",
+          id: "wiggers",
+          label: "Wiggers",
           content: (
             <ContentBlock
-              id="visualization"
               tag="mechanism"
               title="Interactive Wiggers diagram"
-              lede="Play the cycle, pause anywhere, or drag across the chart to scrub. Select a phase to read its pressure, volume, valve and sound relationships; click a valve to see what opens and closes it."
+              lede="One shared timeline drives the ECG, all three pressure traces, ventricular volume, all four valves and the heart sounds. Play, pause, scrub, restart or change speed; select a phase to focus it and dim the rest; click any valve for its pressure logic. Keyboard: space plays or pauses, arrow keys scrub, Home restarts, Escape clears selection."
             >
               <CardiacCycleLab />
             </ContentBlock>
@@ -84,11 +116,11 @@ function CardiacCycleTopic() {
           label: "Mechanism",
           content: (
             <ContentBlock
-              id="mechanism"
               tag="mechanism"
               title="Why the cycle behaves this way"
               lede="Every valve event is a pressure-gradient event. Nothing in the cycle is scheduled — valves are passive and respond only to the pressure across them."
             >
+
               <div className="grid gap-4 md:grid-cols-3">
                 {[
                   {
@@ -115,14 +147,15 @@ function CardiacCycleTopic() {
         },
         {
           id: "clinical",
-          label: "Clinical presentation",
+          label: "Clinical",
           content: (
+            <div className="space-y-12 md:space-y-16">
             <ContentBlock
-              id="clinical"
               tag="classic-presentation"
               title="At the bedside"
               lede="What the cycle sounds and feels like when it goes wrong."
             >
+
               <div className="space-y-3">
                 {[
                   {
@@ -145,18 +178,40 @@ function CardiacCycleTopic() {
                 ))}
               </div>
             </ContentBlock>
+
+            <ContentBlock
+              tag="clinical-pearl"
+              title="Explicit links out of the cycle"
+              lede="Each clinical concept is anchored to one moment on the timeline above."
+            >
+              <ul className="grid gap-3 md:grid-cols-2">
+                {CLINICAL_LINKS.map(([concept, anchor, link]) => (
+                  <li key={concept} className="glass-panel rounded-xl p-5">
+                    <p className="font-display text-[15px] text-foreground">{concept}</p>
+                    <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-cyan">
+                      {anchor}
+                    </p>
+                    <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+                      {link}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </ContentBlock>
+            </div>
           ),
         },
         {
-          id: "diagnostic",
-          label: "Diagnostic interpretation",
+          id: "tracings",
+          label: "Tracings",
           content: (
+            <div className="space-y-12 md:space-y-16">
             <ContentBlock
-              id="diagnostic"
               tag="differential"
               title="Reading the tracings"
               lede="How each recording maps back onto the same seven phases."
             >
+
               <div className="glass-panel overflow-hidden rounded-xl">
                 <table className="w-full text-left text-[13px]">
                   <thead className="border-b border-border/60 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
@@ -184,18 +239,13 @@ function CardiacCycleTopic() {
                 </table>
               </div>
             </ContentBlock>
-          ),
-        },
-        {
-          id: "usmle",
-          label: "USMLE associations",
-          content: (
+
             <ContentBlock
-              id="usmle"
               tag="usmle-trap"
               title="Where candidates lose the point"
               lede="Reliable traps built on the same physiology."
             >
+
               <div className="grid gap-3 md:grid-cols-2">
                 {[
                   ["\u201cSystole starts at the QRS\u201d", "Electrical events precede mechanical events. Mechanical systole begins with mitral closure and S1, shortly after the QRS."],
@@ -210,18 +260,13 @@ function CardiacCycleTopic() {
                 ))}
               </div>
             </ContentBlock>
-          ),
-        },
-        {
-          id: "related",
-          label: "Related concepts",
-          content: (
+
             <ContentBlock
-              id="related"
               tag="clinical-pearl"
               title="Where this leads next"
               lede="Concepts that build directly on the cardiac cycle. These lessons are being authored — they are listed here as the curriculum map, not as live links."
             >
+
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   ["Pressure–volume loop", "The same cycle re-plotted as work"],
@@ -250,6 +295,7 @@ function CardiacCycleTopic() {
                 </Link>
               </p>
             </ContentBlock>
+            </div>
           ),
         },
         {
@@ -257,16 +303,15 @@ function CardiacCycleTopic() {
           label: "Active recall",
           content: (
             <ContentBlock
-              id="recall"
               tag="high-yield"
               title="Active recall"
               lede="Answer before revealing. Retrieval, not rereading, is what consolidates this material."
             >
               <div className="mb-5 flex flex-wrap items-center gap-2">
-                <TaxonomyBadge kind="high-yield" />
                 <span className="font-mono text-[11px] text-muted-foreground">
                   6 questions · untimed
                 </span>
+
               </div>
               <ActiveRecall
                 items={[

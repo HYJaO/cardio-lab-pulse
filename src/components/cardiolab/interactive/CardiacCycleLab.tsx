@@ -3,20 +3,23 @@ import { Pause, Play, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   CYCLE_MS,
   PHASES,
+  PHASE_EVENT,
   SOUNDS,
-  aorticOpen,
+  VALVES,
+  VALVE_IDS,
   aorticPressure,
   atrialPressure,
   curvePath,
   ecg,
-  mitralOpen,
   phaseAt,
+  valveOpen,
   ventricularPressure,
   ventricularVolume,
   yFor,
   type Phase,
+  type ValveId,
 } from "@/lib/cardiac-cycle";
-import { ValveDiagram, VALVE_NOTES } from "./ValveDiagram";
+import { ValveDiagram } from "./ValveDiagram";
 
 const W = 1000;
 const H_ECG = 110;
@@ -29,11 +32,18 @@ const P_MAX = 130;
 const V_MIN = 40;
 const V_MAX = 130;
 
-type ValveId = "mitral" | "aortic";
+const SPEEDS = [0.25, 0.5, 1, 2];
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
+  );
+}
 
 export function CardiacCycleLab() {
   const [t, setT] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(0.5);
   const [hoverPhase, setHoverPhase] = useState<Phase | null>(null);
   const [selectedPhaseId, setSelectedPhaseId] = useState<string | null>(null);
@@ -41,6 +51,12 @@ export function CardiacCycleLab() {
   const trackRef = useRef<HTMLDivElement>(null);
   const raf = useRef<number | null>(null);
   const last = useRef<number | null>(null);
+
+  // Respect reduced-motion: start paused, otherwise autoplay.
+  useEffect(() => {
+    if (!prefersReducedMotion()) setPlaying(true);
+  }, []);
+
 
   useEffect(() => {
     if (!playing) {
@@ -92,11 +108,55 @@ export function CardiacCycleLab() {
     setSelectedPhaseId(null);
   };
 
+  const nudge = (delta: number) => {
+    setPlaying(false);
+    setT((prev) => Math.min(0.9999, Math.max(0, prev + delta)));
+  };
+
+  const restart = () => {
+    setT(0);
+    setSelectedPhaseId(null);
+  };
+
+  const onValveSelect = (v: ValveId) => setValve((prev) => (prev === v ? null : v));
+
+  const activeSound = SOUNDS.find((s) => Math.abs(((t - s.t + 1.5) % 1) - 0.5) < 0.02) ?? null;
+
   const x = t * W;
   const highlight = hoverPhase ?? (selectedPhaseId ? detail : null);
+  const focused = selectedPhaseId ? detail : null;
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.tagName === "BUTTON") {
+      if (!(e.key === "ArrowLeft" || e.key === "ArrowRight") || target.tagName === "INPUT") return;
+    }
+    if (e.key === " " || e.key === "k") {
+      e.preventDefault();
+      setPlaying((p) => !p);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      nudge(e.shiftKey ? 0.05 : 0.01);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      nudge(e.shiftKey ? -0.05 : -0.01);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      restart();
+    } else if (e.key === "Escape") {
+      setSelectedPhaseId(null);
+      setValve(null);
+    }
+  };
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      role="group"
+      aria-label="Interactive cardiac cycle instrument. Space plays or pauses, arrow keys scrub, Home restarts, Escape clears selection."
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+    >
+
       {/* controls */}
       <div className="glass-panel flex flex-wrap items-center gap-3 rounded-xl px-4 py-3">
         <button
@@ -110,22 +170,24 @@ export function CardiacCycleLab() {
         </button>
         <button
           type="button"
-          onClick={() => {
-            setT(0);
-            setSelectedPhaseId(null);
-          }}
+          onClick={restart}
           className="inline-flex items-center gap-2 rounded-md border border-hairline px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
         >
           <RotateCcw className="h-3.5 w-3.5" />
-          Reset
+          Restart
         </button>
 
-        <div className="flex items-center gap-1 rounded-md border border-hairline p-0.5 font-mono text-[11px]">
-          {[0.25, 0.5, 1].map((s) => (
+        <div
+          className="flex items-center gap-1 rounded-md border border-hairline p-0.5 font-mono text-[11px]"
+          role="group"
+          aria-label="Playback speed"
+        >
+          {SPEEDS.map((s) => (
             <button
               key={s}
               type="button"
               onClick={() => setSpeed(s)}
+              aria-pressed={speed === s}
               className={`rounded px-2 py-1 transition-colors ${
                 speed === s ? "bg-cyan/20 text-cyan" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -154,6 +216,7 @@ export function CardiacCycleLab() {
           </button>
         </div>
 
+
         <div className="flex w-full items-center gap-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
             Scrub
@@ -178,26 +241,40 @@ export function CardiacCycleLab() {
       </div>
 
       {/* phase selector rail */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1">
+      <div
+        className="flex gap-1.5 overflow-x-auto pb-1"
+        role="tablist"
+        aria-label="Cardiac cycle phases"
+      >
         {PHASES.map((p) => {
           const active = p.id === detail.id;
+          const selected = p.id === selectedPhaseId;
           return (
             <button
               key={p.id}
               type="button"
+              role="tab"
+              aria-selected={selected}
               onMouseEnter={() => setHoverPhase(p)}
               onMouseLeave={() => setHoverPhase(null)}
+              onFocus={() => setHoverPhase(p)}
+              onBlur={() => setHoverPhase(null)}
               onClick={() => {
+                if (selected) {
+                  setSelectedPhaseId(null);
+                  return;
+                }
                 setPlaying(false);
                 setSelectedPhaseId(p.id);
                 setT(p.start + (p.end - p.start) / 2);
               }}
-              className="shrink-0 rounded-md border px-3 py-2 text-left transition-colors"
+              className="min-h-11 shrink-0 rounded-md border px-3 py-2 text-left transition-colors"
               style={{
                 borderColor: active ? "var(--cyan)" : "var(--hairline)",
                 backgroundColor: active
                   ? "color-mix(in oklab, var(--cyan) 12%, transparent)"
                   : "transparent",
+                opacity: selectedPhaseId && !selected ? 0.45 : 1,
               }}
             >
               <span className="block font-mono text-[10px] text-muted-foreground">
@@ -210,6 +287,19 @@ export function CardiacCycleLab() {
           );
         })}
       </div>
+      {selectedPhaseId && (
+        <p className="font-mono text-[11px] text-muted-foreground">
+          Phase focus on — unrelated phases dimmed.{" "}
+          <button
+            type="button"
+            onClick={() => setSelectedPhaseId(null)}
+            className="text-cyan underline-offset-4 hover:underline"
+          >
+            Clear focus
+          </button>
+        </p>
+      )}
+
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         {/* charts */}
@@ -226,6 +316,7 @@ export function CardiacCycleLab() {
             x={x}
             highlight={highlight}
             hoverPhase={setHoverPhase}
+            focus={focused}
           >
             <path
               d={curvePath(ecg, { width: W, height: H_ECG, min: -0.35, max: 1.15, pad: PAD })}
@@ -244,6 +335,7 @@ export function CardiacCycleLab() {
             x={x}
             highlight={highlight}
             hoverPhase={setHoverPhase}
+            focus={focused}
             gridValues={[0, 40, 80, 120]}
             scale={{ min: P_MIN, max: P_MAX }}
           >
@@ -299,6 +391,7 @@ export function CardiacCycleLab() {
             x={x}
             highlight={highlight}
             hoverPhase={setHoverPhase}
+            focus={focused}
             gridValues={[50, 120]}
             scale={{ min: V_MIN, max: V_MAX }}
           >
@@ -323,41 +416,51 @@ export function CardiacCycleLab() {
             <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Valves &amp; heart sounds
             </p>
-            <svg viewBox={`0 0 ${W} 74`} className="w-full" role="img" aria-label="Valve opening timeline and heart sound markers">
-              <TimelineBar
-                label="Mitral"
-                y={6}
-                segments={[
-                  [0, 0.1],
-                  [0.5, 1],
-                ]}
-              />
-              <TimelineBar label="Aortic" y={34} segments={[[0.16, 0.44]]} />
+            <svg
+              viewBox={`0 0 ${W} 132`}
+              className="w-full"
+              role="img"
+              aria-label="Opening intervals for all four valves and heart sound markers"
+            >
+              {VALVE_IDS.map((id, i) => (
+                <TimelineBar
+                  key={id}
+                  label={VALVES[id].name.replace(" valve", "")}
+                  y={6 + i * 26}
+                  segments={VALVES[id].openSegments}
+                  dim={valve !== null && valve !== id}
+                  active={valve === id}
+                  onSelect={() => onValveSelect(id)}
+                />
+              ))}
               {SOUNDS.map((s) => (
                 <g key={s.id}>
                   <line
                     x1={s.t * W}
                     x2={s.t * W}
                     y1={0}
-                    y2={62}
+                    y2={112}
                     stroke="var(--violet)"
                     strokeDasharray="3 3"
-                    strokeOpacity="0.7"
+                    strokeOpacity={activeSound?.id === s.id ? 1 : 0.6}
+                    strokeWidth={activeSound?.id === s.id ? 2 : 1}
                   />
                   <text
                     x={s.t * W + 6}
-                    y={70}
+                    y={126}
                     fontSize="14"
                     className="font-mono"
                     fill="var(--violet)"
+                    opacity={activeSound?.id === s.id ? 1 : 0.7}
                   >
                     {s.label}
                   </text>
                 </g>
               ))}
-              <line x1={x} x2={x} y1={0} y2={62} stroke="var(--cyan)" strokeWidth="2" />
+              <line x1={x} x2={x} y1={0} y2={112} stroke="var(--cyan)" strokeWidth="2" />
             </svg>
           </div>
+
 
           <Legend />
         </div>
@@ -375,32 +478,61 @@ export function CardiacCycleLab() {
               <Readout label="LV volume" value={`${ventricularVolume(t).toFixed(0)} mL`} color="var(--teal)" />
               <Readout
                 label="Valves"
-                value={`${mitralOpen(t) ? "MV open" : "MV shut"} · ${aorticOpen(t) ? "AV open" : "AV shut"}`}
+                value={VALVE_IDS.map((v) => `${VALVES[v].short}${valveOpen[v](t) ? "↑" : "↓"}`).join(" ")}
                 color="var(--foreground)"
+              />
+              <Readout
+                label="Heart sound"
+                value={activeSound ? `${activeSound.label} — ${activeSound.detail.split("—")[0]?.trim()}` : "—"}
+                color={activeSound ? "var(--violet)" : "var(--muted-foreground)"}
               />
               <Readout
                 label="Cycle"
                 value={current.part === "systole" ? "SYSTOLE" : "DIASTOLE"}
                 color={current.part === "systole" ? "var(--crimson)" : "var(--cyan)"}
               />
+
             </div>
           </div>
 
-          <ValveDiagram t={t} selected={valve} onSelect={(v) => setValve(v === valve ? null : v)} />
+          <ValveDiagram t={t} selected={valve} onSelect={onValveSelect} />
         </div>
       </div>
 
       {valve && (
         <div className="glass-panel rounded-xl border-l-2 border-l-cyan p-5">
-          <h4 className="font-display text-[15px] text-foreground">{VALVE_NOTES[valve].title}</h4>
-          <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
-            {VALVE_NOTES[valve].body}
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <h4 className="font-display text-[15px] text-foreground">{VALVES[valve].name}</h4>
+            <span
+              className="rounded-[5px] px-2 py-[3px] font-mono text-[10px] uppercase tracking-[0.14em]"
+              style={{
+                color: valveOpen[valve](t) ? "var(--emerald)" : "var(--crimson)",
+                backgroundColor: `color-mix(in oklab, ${valveOpen[valve](t) ? "var(--emerald)" : "var(--crimson)"} 14%, transparent)`,
+              }}
+            >
+              {valveOpen[valve](t) ? "OPEN" : "CLOSED"}
+            </span>
+            <span className="font-mono text-[11px] text-muted-foreground">
+              {VALVES[valve].side} heart · {VALVES[valve].type}
+            </span>
+          </div>
+          <dl className="mt-4 grid gap-x-8 gap-y-4 md:grid-cols-2">
+            <Field label="Pressure relationship" value={VALVES[valve].gradient} />
+            <Field label="What opens it" value={VALVES[valve].opens} />
+            <Field label="What closes it" value={VALVES[valve].closes} />
+            <Field label="Associated heart sound" value={VALVES[valve].sound} />
+            <Field label="Clinical link" value={VALVES[valve].clinical} />
+          </dl>
         </div>
       )}
 
+
       {/* phase detail */}
-      <div className="glass-panel rounded-xl p-5 md:p-6">
+      <div
+        className="glass-panel rounded-xl p-5 md:p-6"
+        style={focused ? { borderColor: "var(--cyan)" } : undefined}
+        aria-live="polite"
+      >
         <div className="flex flex-wrap items-center gap-3">
           <span
             className="rounded-[5px] px-2 py-[3px] font-mono text-[10px] uppercase tracking-[0.14em]"
@@ -417,17 +549,27 @@ export function CardiacCycleLab() {
           <span className="font-mono text-[11px] text-muted-foreground">
             {Math.round(detail.start * CYCLE_MS)}–{Math.round(detail.end * CYCLE_MS)} ms
           </span>
+          {focused && (
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-cyan">
+              Focused
+            </span>
+          )}
         </div>
 
+        <p className="mt-4 text-[14px] leading-relaxed text-foreground">
+          {PHASE_EVENT[detail.id]}
+        </p>
+
         <dl className="mt-5 grid gap-x-8 gap-y-4 md:grid-cols-2">
-          <Field label="Pressure changes" value={detail.pressure} />
-          <Field label="Volume changes" value={detail.volume} />
+          <Field label="Pressure relationship" value={detail.pressure} />
+          <Field label="Volume relationship" value={detail.volume} />
           <Field label="Valve status" value={detail.valves} />
           <Field label="ECG relationship" value={detail.ecg} />
           <Field label="Heart sound" value={detail.sound ?? "None in this phase"} />
           <Field label="Why it matters" value={detail.pearl} />
         </dl>
       </div>
+
     </div>
   );
 }
@@ -442,6 +584,7 @@ function Panel({
   hoverPhase,
   gridValues,
   scale,
+  focus = null,
 }: {
   title: string;
   heightClass: string;
@@ -452,6 +595,7 @@ function Panel({
   hoverPhase: (p: Phase | null) => void;
   gridValues?: number[];
   scale?: { min: number; max: number };
+  focus?: Phase | null;
 }) {
   return (
     <div className="mb-3">
@@ -478,6 +622,7 @@ function Panel({
             onMouseLeave={() => hoverPhase(null)}
           />
         ))}
+
         {PHASES.map((p) => (
           <line
             key={`${p.id}-l`}
@@ -503,7 +648,30 @@ function Panel({
             })
           : null}
         {children}
+        {focus && (
+          <g aria-hidden pointerEvents="none">
+            <rect x={0} y={0} width={focus.start * W} height={height} fill="var(--background)" opacity="0.62" />
+            <rect
+              x={focus.end * W}
+              y={0}
+              width={(1 - focus.end) * W}
+              height={height}
+              fill="var(--background)"
+              opacity="0.62"
+            />
+            <rect
+              x={focus.start * W}
+              y={0}
+              width={(focus.end - focus.start) * W}
+              height={height}
+              fill="none"
+              stroke="var(--cyan)"
+              strokeOpacity="0.6"
+            />
+          </g>
+        )}
         <line x1={x} x2={x} y1={0} y2={height} stroke="var(--cyan)" strokeWidth="2" />
+
       </svg>
     </div>
   );
@@ -517,14 +685,34 @@ function TimelineBar({
   label,
   y,
   segments,
+  dim = false,
+  active = false,
+  onSelect,
 }: {
   label: string;
   y: number;
   segments: [number, number][];
+  dim?: boolean;
+  active?: boolean;
+  onSelect?: () => void;
 }) {
   return (
-    <g>
-      <rect x={0} y={y} width={W} height="18" fill="color-mix(in oklab, var(--crimson) 8%, transparent)" rx="4" />
+    <g
+      opacity={dim ? 0.35 : 1}
+      className={onSelect ? "cursor-pointer" : undefined}
+      onClick={onSelect}
+      role={onSelect ? "button" : undefined}
+      aria-label={onSelect ? `${label} valve opening interval` : undefined}
+    >
+      <rect
+        x={0}
+        y={y}
+        width={W}
+        height="18"
+        fill="color-mix(in oklab, var(--crimson) 8%, transparent)"
+        rx="4"
+        stroke={active ? "var(--cyan)" : "transparent"}
+      />
       {segments.map(([s, e]) => (
         <rect
           key={s}
@@ -542,6 +730,7 @@ function TimelineBar({
     </g>
   );
 }
+
 
 function Legend() {
   const items = [
