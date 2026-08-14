@@ -108,8 +108,24 @@ export function CardiacCycleLab() {
     setSelectedPhaseId(null);
   };
 
+  const nudge = (delta: number) => {
+    setPlaying(false);
+    setT((prev) => Math.min(0.9999, Math.max(0, prev + delta)));
+  };
+
+  const restart = () => {
+    setT(0);
+    setSelectedPhaseId(null);
+  };
+
+  const onValveSelect = (v: ValveId) => setValve((prev) => (prev === v ? null : v));
+
+  const activeSound = SOUNDS.find((s) => Math.abs(((t - s.t + 1.5) % 1) - 0.5) < 0.02) ?? null;
+
   const x = t * W;
   const highlight = hoverPhase ?? (selectedPhaseId ? detail : null);
+  const focused = selectedPhaseId ? detail : null;
+
 
   return (
     <div className="space-y-4">
