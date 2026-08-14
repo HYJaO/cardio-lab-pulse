@@ -631,7 +631,30 @@ function Panel({
             })
           : null}
         {children}
+        {focus && (
+          <g aria-hidden pointerEvents="none">
+            <rect x={0} y={0} width={focus.start * W} height={height} fill="var(--background)" opacity="0.62" />
+            <rect
+              x={focus.end * W}
+              y={0}
+              width={(1 - focus.end) * W}
+              height={height}
+              fill="var(--background)"
+              opacity="0.62"
+            />
+            <rect
+              x={focus.start * W}
+              y={0}
+              width={(focus.end - focus.start) * W}
+              height={height}
+              fill="none"
+              stroke="var(--cyan)"
+              strokeOpacity="0.6"
+            />
+          </g>
+        )}
         <line x1={x} x2={x} y1={0} y2={height} stroke="var(--cyan)" strokeWidth="2" />
+
       </svg>
     </div>
   );
