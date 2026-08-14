@@ -98,31 +98,67 @@ export function TopicPage({
         </div>
       </header>
 
+      {/* mobile sticky section nav */}
+      <nav
+        aria-label="Lesson sections"
+        className="sticky top-16 z-30 border-b border-border/50 bg-background/85 backdrop-blur lg:hidden"
+      >
+        <ul className="flex gap-1 overflow-x-auto px-4 py-2">
+          {sections.map((s, i) => (
+            <li key={s.id}>
+              <a
+                href={`#${s.id}`}
+                aria-current={active === s.id ? "true" : undefined}
+                className={`inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-2 font-mono text-[11px] transition-colors ${
+                  active === s.id
+                    ? "border-cyan text-cyan"
+                    : "border-hairline text-muted-foreground"
+                }`}
+              >
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                {s.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
       <main className="mx-auto w-full max-w-[1400px] px-5 pb-24 md:px-10">
         <div className="gap-12 lg:grid lg:grid-cols-[210px_minmax(0,1fr)]">
-          <nav
-            aria-label="On this page"
-            className="hidden lg:block"
-          >
+          <nav aria-label="On this page" className="hidden lg:block">
             <ul className="sticky top-24 space-y-1 border-l border-border/60 py-2">
-              {sections.map((s) => (
-                <li key={s.id}>
-                  <a
-                    href={`#${s.id}`}
-                    className="-ml-px block border-l border-transparent py-1.5 pl-4 text-[12.5px] text-muted-foreground transition-colors hover:border-cyan hover:text-foreground"
-                  >
-                    {s.label}
-                  </a>
-                </li>
-              ))}
+              {sections.map((s, i) => {
+                const isActive = active === s.id;
+                return (
+                  <li key={s.id}>
+                    <a
+                      href={`#${s.id}`}
+                      aria-current={isActive ? "true" : undefined}
+                      className={`-ml-px flex items-baseline gap-2 border-l py-1.5 pl-4 text-[12.5px] transition-colors ${
+                        isActive
+                          ? "border-cyan text-foreground"
+                          : "border-transparent text-muted-foreground hover:border-cyan hover:text-foreground"
+                      }`}
+                    >
+                      <span className={`font-mono text-[10px] ${isActive ? "text-cyan" : ""}`}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      {s.label}
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
           <div className="min-w-0 space-y-12 pt-10 md:space-y-16 md:pt-14">
             {sections.map((s) => (
-              <div key={s.id}>{s.content}</div>
+              <div key={s.id} id={s.id} className="scroll-mt-28">
+                {s.content}
+              </div>
             ))}
           </div>
+
         </div>
       </main>
 
