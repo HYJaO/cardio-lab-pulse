@@ -525,7 +525,11 @@ export function CardiacCycleLab() {
 
 
       {/* phase detail */}
-      <div className="glass-panel rounded-xl p-5 md:p-6">
+      <div
+        className="glass-panel rounded-xl p-5 md:p-6"
+        style={focused ? { borderColor: "var(--cyan)" } : undefined}
+        aria-live="polite"
+      >
         <div className="flex flex-wrap items-center gap-3">
           <span
             className="rounded-[5px] px-2 py-[3px] font-mono text-[10px] uppercase tracking-[0.14em]"
@@ -542,17 +546,27 @@ export function CardiacCycleLab() {
           <span className="font-mono text-[11px] text-muted-foreground">
             {Math.round(detail.start * CYCLE_MS)}–{Math.round(detail.end * CYCLE_MS)} ms
           </span>
+          {focused && (
+            <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-cyan">
+              Focused
+            </span>
+          )}
         </div>
 
+        <p className="mt-4 text-[14px] leading-relaxed text-foreground">
+          {PHASE_EVENT[detail.id]}
+        </p>
+
         <dl className="mt-5 grid gap-x-8 gap-y-4 md:grid-cols-2">
-          <Field label="Pressure changes" value={detail.pressure} />
-          <Field label="Volume changes" value={detail.volume} />
+          <Field label="Pressure relationship" value={detail.pressure} />
+          <Field label="Volume relationship" value={detail.volume} />
           <Field label="Valve status" value={detail.valves} />
           <Field label="ECG relationship" value={detail.ecg} />
           <Field label="Heart sound" value={detail.sound ?? "None in this phase"} />
           <Field label="Why it matters" value={detail.pearl} />
         </dl>
       </div>
+
     </div>
   );
 }
