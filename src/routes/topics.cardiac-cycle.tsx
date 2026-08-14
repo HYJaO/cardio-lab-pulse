@@ -113,14 +113,15 @@ function CardiacCycleTopic() {
         },
         {
           id: "clinical",
-          label: "Clinical presentation",
+          label: "Clinical",
           content: (
+            <div className="space-y-12 md:space-y-16">
             <ContentBlock
-              id="clinical"
               tag="classic-presentation"
               title="At the bedside"
               lede="What the cycle sounds and feels like when it goes wrong."
             >
+
               <div className="space-y-3">
                 {[
                   {
