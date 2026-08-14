@@ -226,18 +226,13 @@ function CardiacCycleTopic() {
                 ))}
               </div>
             </ContentBlock>
-          ),
-        },
-        {
-          id: "related",
-          label: "Related concepts",
-          content: (
+
             <ContentBlock
-              id="related"
               tag="clinical-pearl"
               title="Where this leads next"
               lede="Concepts that build directly on the cardiac cycle. These lessons are being authored — they are listed here as the curriculum map, not as live links."
             >
+
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                 {[
                   ["Pressure–volume loop", "The same cycle re-plotted as work"],
