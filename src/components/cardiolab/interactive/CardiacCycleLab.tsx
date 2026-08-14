@@ -642,14 +642,34 @@ function TimelineBar({
   label,
   y,
   segments,
+  dim = false,
+  active = false,
+  onSelect,
 }: {
   label: string;
   y: number;
   segments: [number, number][];
+  dim?: boolean;
+  active?: boolean;
+  onSelect?: () => void;
 }) {
   return (
-    <g>
-      <rect x={0} y={y} width={W} height="18" fill="color-mix(in oklab, var(--crimson) 8%, transparent)" rx="4" />
+    <g
+      opacity={dim ? 0.35 : 1}
+      className={onSelect ? "cursor-pointer" : undefined}
+      onClick={onSelect}
+      role={onSelect ? "button" : undefined}
+      aria-label={onSelect ? `${label} valve opening interval` : undefined}
+    >
+      <rect
+        x={0}
+        y={y}
+        width={W}
+        height="18"
+        fill="color-mix(in oklab, var(--crimson) 8%, transparent)"
+        rx="4"
+        stroke={active ? "var(--cyan)" : "transparent"}
+      />
       {segments.map(([s, e]) => (
         <rect
           key={s}
@@ -667,6 +687,7 @@ function TimelineBar({
     </g>
   );
 }
+
 
 function Legend() {
   const items = [
