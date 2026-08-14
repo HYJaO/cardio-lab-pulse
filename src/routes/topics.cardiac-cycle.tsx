@@ -205,18 +205,13 @@ function CardiacCycleTopic() {
                 </table>
               </div>
             </ContentBlock>
-          ),
-        },
-        {
-          id: "usmle",
-          label: "USMLE associations",
-          content: (
+
             <ContentBlock
-              id="usmle"
               tag="usmle-trap"
               title="Where candidates lose the point"
               lede="Reliable traps built on the same physiology."
             >
+
               <div className="grid gap-3 md:grid-cols-2">
                 {[
                   ["\u201cSystole starts at the QRS\u201d", "Electrical events precede mechanical events. Mechanical systole begins with mitral closure and S1, shortly after the QRS."],
