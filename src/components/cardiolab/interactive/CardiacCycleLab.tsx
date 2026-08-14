@@ -391,14 +391,20 @@ export function CardiacCycleLab() {
               <Readout label="LV volume" value={`${ventricularVolume(t).toFixed(0)} mL`} color="var(--teal)" />
               <Readout
                 label="Valves"
-                value={`${mitralOpen(t) ? "MV open" : "MV shut"} · ${aorticOpen(t) ? "AV open" : "AV shut"}`}
+                value={VALVE_IDS.map((v) => `${VALVES[v].short}${valveOpen[v](t) ? "↑" : "↓"}`).join(" ")}
                 color="var(--foreground)"
+              />
+              <Readout
+                label="Heart sound"
+                value={activeSound ? `${activeSound.label} — ${activeSound.detail.split("—")[0]?.trim()}` : "—"}
+                color={activeSound ? "var(--violet)" : "var(--muted-foreground)"}
               />
               <Readout
                 label="Cycle"
                 value={current.part === "systole" ? "SYSTOLE" : "DIASTOLE"}
                 color={current.part === "systole" ? "var(--crimson)" : "var(--cyan)"}
               />
+
             </div>
           </div>
 
