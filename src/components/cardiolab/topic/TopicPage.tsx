@@ -1,8 +1,9 @@
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, Clock, Signal } from "lucide-react";
 import { Navbar } from "../Navbar";
 import { Footer } from "../Footer";
+
 
 export type TopicPageSection = {
   /** Anchor id, also used by the section rail. */
