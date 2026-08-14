@@ -32,6 +32,41 @@ const HIGH_YIELD = [
   "Tachycardia shortens diastole first, compromising filling and coronary perfusion.",
 ];
 
+const CLINICAL_LINKS: [string, string, string][] = [
+  [
+    "S1",
+    "→ Isovolumetric contraction (t ≈ 105 ms)",
+    "Mitral and tricuspid closure the instant ventricular pressure crosses atrial pressure. Loud in mitral stenosis (valve still wide open when the ventricle contracts), soft in severe mitral regurgitation or a long PR interval.",
+  ],
+  [
+    "S2",
+    "→ Isovolumetric relaxation (t ≈ 447 ms)",
+    "Aortic then pulmonic closure as ventricular pressure falls below great-vessel pressure. Inspiration delays P2 (physiologic splitting); the same instant produces the dicrotic notch on the aortic trace.",
+  ],
+  [
+    "Systole",
+    "→ S1 to S2",
+    "Defined mechanically: from mitral closure to aortic closure — isovolumetric contraction plus rapid and reduced ejection. The QRS precedes it; electrical events are not systole.",
+  ],
+  [
+    "Diastole",
+    "→ S2 back to S1",
+    "Isovolumetric relaxation, rapid filling, diastasis, atrial systole. Left coronary perfusion happens here, which is why tachycardia and aortic stenosis threaten the subendocardium.",
+  ],
+  [
+    "Murmurs",
+    "→ Timed against the valve rows",
+    "A murmur between S1 and S2 is systolic (AV regurgitation or semilunar stenosis); between S2 and S1 it is diastolic (semilunar regurgitation or AV stenosis). Timing on the timeline is the whole diagnosis.",
+  ],
+  [
+    "Pressure–volume loop",
+    "→ Same cycle, pressure plotted against volume",
+    "The two isovolumetric phases become the vertical limbs, ejection the upper limb, filling the lower limb. Loop width is stroke volume; loop area is stroke work.",
+  ],
+];
+
+
+
 function CardiacCycleTopic() {
   return (
     <TopicPage
