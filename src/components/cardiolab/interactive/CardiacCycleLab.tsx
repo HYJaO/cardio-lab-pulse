@@ -339,41 +339,51 @@ export function CardiacCycleLab() {
             <p className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Valves &amp; heart sounds
             </p>
-            <svg viewBox={`0 0 ${W} 74`} className="w-full" role="img" aria-label="Valve opening timeline and heart sound markers">
-              <TimelineBar
-                label="Mitral"
-                y={6}
-                segments={[
-                  [0, 0.1],
-                  [0.5, 1],
-                ]}
-              />
-              <TimelineBar label="Aortic" y={34} segments={[[0.16, 0.44]]} />
+            <svg
+              viewBox={`0 0 ${W} 132`}
+              className="w-full"
+              role="img"
+              aria-label="Opening intervals for all four valves and heart sound markers"
+            >
+              {VALVE_IDS.map((id, i) => (
+                <TimelineBar
+                  key={id}
+                  label={VALVES[id].name.replace(" valve", "")}
+                  y={6 + i * 26}
+                  segments={VALVES[id].openSegments}
+                  dim={valve !== null && valve !== id}
+                  active={valve === id}
+                  onSelect={() => onValveSelect(id)}
+                />
+              ))}
               {SOUNDS.map((s) => (
                 <g key={s.id}>
                   <line
                     x1={s.t * W}
                     x2={s.t * W}
                     y1={0}
-                    y2={62}
+                    y2={112}
                     stroke="var(--violet)"
                     strokeDasharray="3 3"
-                    strokeOpacity="0.7"
+                    strokeOpacity={activeSound?.id === s.id ? 1 : 0.6}
+                    strokeWidth={activeSound?.id === s.id ? 2 : 1}
                   />
                   <text
                     x={s.t * W + 6}
-                    y={70}
+                    y={126}
                     fontSize="14"
                     className="font-mono"
                     fill="var(--violet)"
+                    opacity={activeSound?.id === s.id ? 1 : 0.7}
                   >
                     {s.label}
                   </text>
                 </g>
               ))}
-              <line x1={x} x2={x} y1={0} y2={62} stroke="var(--cyan)" strokeWidth="2" />
+              <line x1={x} x2={x} y1={0} y2={112} stroke="var(--cyan)" strokeWidth="2" />
             </svg>
           </div>
+
 
           <Legend />
         </div>
