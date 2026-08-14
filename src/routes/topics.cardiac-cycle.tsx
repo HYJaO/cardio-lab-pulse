@@ -144,18 +144,40 @@ function CardiacCycleTopic() {
                 ))}
               </div>
             </ContentBlock>
+
+            <ContentBlock
+              tag="clinical-pearl"
+              title="Explicit links out of the cycle"
+              lede="Each clinical concept is anchored to one moment on the timeline above."
+            >
+              <ul className="grid gap-3 md:grid-cols-2">
+                {CLINICAL_LINKS.map(([concept, anchor, link]) => (
+                  <li key={concept} className="glass-panel rounded-xl p-5">
+                    <p className="font-display text-[15px] text-foreground">{concept}</p>
+                    <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-cyan">
+                      {anchor}
+                    </p>
+                    <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+                      {link}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </ContentBlock>
+            </div>
           ),
         },
         {
-          id: "diagnostic",
-          label: "Diagnostic interpretation",
+          id: "tracings",
+          label: "Tracings",
           content: (
+            <div className="space-y-12 md:space-y-16">
             <ContentBlock
-              id="diagnostic"
               tag="differential"
               title="Reading the tracings"
               lede="How each recording maps back onto the same seven phases."
             >
+
               <div className="glass-panel overflow-hidden rounded-xl">
                 <table className="w-full text-left text-[13px]">
                   <thead className="border-b border-border/60 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
