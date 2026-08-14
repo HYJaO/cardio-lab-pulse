@@ -304,3 +304,125 @@ export function yFor(
   const usable = opts.height - pad * 2;
   return pad + usable - ((value - opts.min) / (opts.max - opts.min)) * usable;
 }
+
+/* ---------- four-valve model ---------- */
+
+export type ValveId = "mitral" | "aortic" | "tricuspid" | "pulmonic";
+
+/** Right-sided valves open slightly earlier and close slightly later (lower pressures). */
+export const tricuspidOpen = (t: number) => {
+  const x = ((t % 1) + 1) % 1;
+  return x < 0.108 || x >= 0.487;
+};
+export const pulmonicOpen = (t: number) => {
+  const x = ((t % 1) + 1) % 1;
+  return x >= 0.148 && x < 0.458;
+};
+
+export const valveOpen: Record<ValveId, (t: number) => boolean> = {
+  mitral: mitralOpen,
+  aortic: aorticOpen,
+  tricuspid: tricuspidOpen,
+  pulmonic: pulmonicOpen,
+};
+
+export type ValveInfo = {
+  id: ValveId;
+  name: string;
+  short: string;
+  side: "left" | "right";
+  type: "atrioventricular" | "semilunar";
+  gradient: string;
+  opens: string;
+  closes: string;
+  sound: string;
+  clinical: string;
+  /** Open intervals as fractions of the cycle, for timeline bars. */
+  openSegments: [number, number][];
+};
+
+export const VALVES: Record<ValveId, ValveInfo> = {
+  mitral: {
+    id: "mitral",
+    name: "Mitral valve",
+    short: "MV",
+    side: "left",
+    type: "atrioventricular",
+    gradient: "Left atrial pressure vs left ventricular pressure.",
+    opens:
+      "Opens when LV pressure falls below LA pressure at the end of isovolumetric relaxation (~8 mmHg), beginning rapid filling.",
+    closes:
+      "Closes when LV pressure rises above LA pressure at the onset of ventricular contraction — the first and loudest component of S1.",
+    sound: "S1 (M1 component) on closure. Opening is silent unless stenotic (opening snap).",
+    clinical:
+      "Mitral stenosis raises LA pressure and delays opening (opening snap, diastolic rumble). Mitral regurgitation abolishes true isovolumetric contraction and produces a holosystolic murmur.",
+    openSegments: [
+      [0, 0.1],
+      [0.5, 1],
+    ],
+  },
+  aortic: {
+    id: "aortic",
+    name: "Aortic valve",
+    short: "AV",
+    side: "left",
+    type: "semilunar",
+    gradient: "Left ventricular pressure vs aortic pressure.",
+    opens:
+      "Opens when LV pressure exceeds aortic diastolic pressure (~80 mmHg), ending isovolumetric contraction and starting rapid ejection.",
+    closes:
+      "Closes when LV pressure falls below aortic pressure — generates the A2 component of S2 and the dicrotic notch.",
+    sound: "S2 (A2 component) on closure. An ejection click on opening suggests a bicuspid valve.",
+    clinical:
+      "Aortic stenosis creates a systolic gradient across the open valve (crescendo–decrescendo murmur, pulsus parvus et tardus). Aortic regurgitation allows diastolic backflow and a wide pulse pressure.",
+    openSegments: [[0.16, 0.44]],
+  },
+  tricuspid: {
+    id: "tricuspid",
+    name: "Tricuspid valve",
+    short: "TV",
+    side: "right",
+    type: "atrioventricular",
+    gradient: "Right atrial pressure vs right ventricular pressure.",
+    opens:
+      "Opens slightly before the mitral valve, because RV pressure falls below the low RA pressure sooner.",
+    closes:
+      "Closes just after the mitral valve — the quieter T1 component of S1.",
+    sound: "S1 (T1 component). Normal splitting of S1 is M1 then T1.",
+    clinical:
+      "Tricuspid regurgitation produces giant v waves in the JVP and a holosystolic murmur louder on inspiration (Carvallo sign).",
+    openSegments: [
+      [0, 0.108],
+      [0.487, 1],
+    ],
+  },
+  pulmonic: {
+    id: "pulmonic",
+    name: "Pulmonic valve",
+    short: "PV",
+    side: "right",
+    type: "semilunar",
+    gradient: "Right ventricular pressure vs pulmonary artery pressure.",
+    opens:
+      "Opens earlier than the aortic valve — RV pressure only needs to exceed ~10 mmHg of pulmonary artery pressure.",
+    closes:
+      "Closes after the aortic valve, giving the P2 component of S2. Inspiration delays P2 further, producing physiologic splitting.",
+    sound: "S2 (P2 component). Loud P2 suggests pulmonary hypertension.",
+    clinical:
+      "Fixed splitting of S2 indicates an ASD; paradoxical splitting indicates delayed left ventricular emptying (LBBB, severe AS).",
+    openSegments: [[0.148, 0.458]],
+  },
+};
+
+export const VALVE_IDS = Object.keys(VALVES) as ValveId[];
+
+/** Which phase-level physiologic event dominates each phase. */
+export const PHASE_EVENT: Record<PhaseId, string> = {
+  "atrial-systole": "Atrial kick completes ventricular filling and sets end-diastolic volume (preload).",
+  "isovolumetric-contraction": "Mitral closure with all valves shut: pressure rises, volume does not — dP/dt max.",
+  "rapid-ejection": "Aortic valve opens; two-thirds of stroke volume leaves the ventricle.",
+  "reduced-ejection": "Ejection continues on momentum as repolarization begins; ESV is reached.",
+  "isovolumetric-relaxation": "Aortic closure (S2, dicrotic notch) with all valves shut: active ATP-dependent relaxation.",
+  "rapid-filling": "Mitral opens; passive filling supplies ~80% of end-diastolic volume.",
+  diastasis: "Slow passive filling — the first phase sacrificed by tachycardia.",
+};
