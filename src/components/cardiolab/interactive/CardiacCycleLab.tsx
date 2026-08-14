@@ -567,6 +567,7 @@ function Panel({
   hoverPhase,
   gridValues,
   scale,
+  focus = null,
 }: {
   title: string;
   heightClass: string;
@@ -577,6 +578,7 @@ function Panel({
   hoverPhase: (p: Phase | null) => void;
   gridValues?: number[];
   scale?: { min: number; max: number };
+  focus?: Phase | null;
 }) {
   return (
     <div className="mb-3">
@@ -603,6 +605,7 @@ function Panel({
             onMouseLeave={() => hoverPhase(null)}
           />
         ))}
+
         {PHASES.map((p) => (
           <line
             key={`${p.id}-l`}
