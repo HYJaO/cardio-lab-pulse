@@ -3,20 +3,23 @@ import { Pause, Play, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react"
 import {
   CYCLE_MS,
   PHASES,
+  PHASE_EVENT,
   SOUNDS,
-  aorticOpen,
+  VALVES,
+  VALVE_IDS,
   aorticPressure,
   atrialPressure,
   curvePath,
   ecg,
-  mitralOpen,
   phaseAt,
+  valveOpen,
   ventricularPressure,
   ventricularVolume,
   yFor,
   type Phase,
+  type ValveId,
 } from "@/lib/cardiac-cycle";
-import { ValveDiagram, VALVE_NOTES } from "./ValveDiagram";
+import { ValveDiagram } from "./ValveDiagram";
 
 const W = 1000;
 const H_ECG = 110;
@@ -29,11 +32,18 @@ const P_MAX = 130;
 const V_MIN = 40;
 const V_MAX = 130;
 
-type ValveId = "mitral" | "aortic";
+const SPEEDS = [0.25, 0.5, 1, 2];
+
+function prefersReducedMotion() {
+  return (
+    typeof window !== "undefined" &&
+    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true
+  );
+}
 
 export function CardiacCycleLab() {
   const [t, setT] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(0.5);
   const [hoverPhase, setHoverPhase] = useState<Phase | null>(null);
   const [selectedPhaseId, setSelectedPhaseId] = useState<string | null>(null);
@@ -41,6 +51,12 @@ export function CardiacCycleLab() {
   const trackRef = useRef<HTMLDivElement>(null);
   const raf = useRef<number | null>(null);
   const last = useRef<number | null>(null);
+
+  // Respect reduced-motion: start paused, otherwise autoplay.
+  useEffect(() => {
+    if (!prefersReducedMotion()) setPlaying(true);
+  }, []);
+
 
   useEffect(() => {
     if (!playing) {
