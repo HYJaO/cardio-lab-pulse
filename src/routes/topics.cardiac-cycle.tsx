@@ -42,11 +42,10 @@ function CardiacCycleTopic() {
       minutes={24}
       sections={[
         {
-          id: "high-yield",
-          label: "High-yield summary",
+          id: "overview",
+          label: "Overview",
           content: (
             <ContentBlock
-              id="high-yield"
               tag="high-yield"
               title="What you must know"
               lede="The six statements examiners return to again and again."
@@ -66,14 +65,13 @@ function CardiacCycleTopic() {
           ),
         },
         {
-          id: "visualization",
-          label: "Interactive visualization",
+          id: "wiggers",
+          label: "Wiggers",
           content: (
             <ContentBlock
-              id="visualization"
               tag="mechanism"
               title="Interactive Wiggers diagram"
-              lede="Play the cycle, pause anywhere, or drag across the chart to scrub. Select a phase to read its pressure, volume, valve and sound relationships; click a valve to see what opens and closes it."
+              lede="One shared timeline drives the ECG, all three pressure traces, ventricular volume, all four valves and the heart sounds. Play, pause, scrub, restart or change speed; select a phase to focus it and dim the rest; click any valve for its pressure logic. Keyboard: space plays or pauses, arrow keys scrub, Home restarts, Escape clears selection."
             >
               <CardiacCycleLab />
             </ContentBlock>
@@ -84,11 +82,11 @@ function CardiacCycleTopic() {
           label: "Mechanism",
           content: (
             <ContentBlock
-              id="mechanism"
               tag="mechanism"
               title="Why the cycle behaves this way"
               lede="Every valve event is a pressure-gradient event. Nothing in the cycle is scheduled — valves are passive and respond only to the pressure across them."
             >
+
               <div className="grid gap-4 md:grid-cols-3">
                 {[
                   {
