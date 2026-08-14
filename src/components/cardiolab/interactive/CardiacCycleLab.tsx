@@ -142,22 +142,24 @@ export function CardiacCycleLab() {
         </button>
         <button
           type="button"
-          onClick={() => {
-            setT(0);
-            setSelectedPhaseId(null);
-          }}
+          onClick={restart}
           className="inline-flex items-center gap-2 rounded-md border border-hairline px-3 py-2 text-[13px] text-muted-foreground transition-colors hover:text-foreground"
         >
           <RotateCcw className="h-3.5 w-3.5" />
-          Reset
+          Restart
         </button>
 
-        <div className="flex items-center gap-1 rounded-md border border-hairline p-0.5 font-mono text-[11px]">
-          {[0.25, 0.5, 1].map((s) => (
+        <div
+          className="flex items-center gap-1 rounded-md border border-hairline p-0.5 font-mono text-[11px]"
+          role="group"
+          aria-label="Playback speed"
+        >
+          {SPEEDS.map((s) => (
             <button
               key={s}
               type="button"
               onClick={() => setSpeed(s)}
+              aria-pressed={speed === s}
               className={`rounded px-2 py-1 transition-colors ${
                 speed === s ? "bg-cyan/20 text-cyan" : "text-muted-foreground hover:text-foreground"
               }`}
@@ -185,6 +187,7 @@ export function CardiacCycleLab() {
             <ChevronRight className="h-3.5 w-3.5" />
           </button>
         </div>
+
 
         <div className="flex w-full items-center gap-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
