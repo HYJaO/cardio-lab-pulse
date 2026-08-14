@@ -125,10 +125,38 @@ export function CardiacCycleLab() {
   const x = t * W;
   const highlight = hoverPhase ?? (selectedPhaseId ? detail : null);
   const focused = selectedPhaseId ? detail : null;
-
+  const onKeyDown = (e: React.KeyboardEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.tagName === "INPUT" || target.tagName === "BUTTON") {
+      if (!(e.key === "ArrowLeft" || e.key === "ArrowRight") || target.tagName === "INPUT") return;
+    }
+    if (e.key === " " || e.key === "k") {
+      e.preventDefault();
+      setPlaying((p) => !p);
+    } else if (e.key === "ArrowRight") {
+      e.preventDefault();
+      nudge(e.shiftKey ? 0.05 : 0.01);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      nudge(e.shiftKey ? -0.05 : -0.01);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      restart();
+    } else if (e.key === "Escape") {
+      setSelectedPhaseId(null);
+      setValve(null);
+    }
+  };
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      role="group"
+      aria-label="Interactive cardiac cycle instrument. Space plays or pauses, arrow keys scrub, Home restarts, Escape clears selection."
+      tabIndex={0}
+      onKeyDown={onKeyDown}
+    >
+
       {/* controls */}
       <div className="glass-panel flex flex-wrap items-center gap-3 rounded-xl px-4 py-3">
         <button
