@@ -261,6 +261,7 @@ function CardiacCycleTopic() {
                 </Link>
               </p>
             </ContentBlock>
+            </div>
           ),
         },
         {
@@ -268,16 +269,15 @@ function CardiacCycleTopic() {
           label: "Active recall",
           content: (
             <ContentBlock
-              id="recall"
               tag="high-yield"
               title="Active recall"
               lede="Answer before revealing. Retrieval, not rereading, is what consolidates this material."
             >
               <div className="mb-5 flex flex-wrap items-center gap-2">
-                <TaxonomyBadge kind="high-yield" />
                 <span className="font-mono text-[11px] text-muted-foreground">
                   6 questions · untimed
                 </span>
+
               </div>
               <ActiveRecall
                 items={[
