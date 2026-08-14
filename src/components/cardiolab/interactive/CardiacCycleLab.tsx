@@ -408,12 +408,31 @@ export function CardiacCycleLab() {
 
       {valve && (
         <div className="glass-panel rounded-xl border-l-2 border-l-cyan p-5">
-          <h4 className="font-display text-[15px] text-foreground">{VALVE_NOTES[valve].title}</h4>
-          <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
-            {VALVE_NOTES[valve].body}
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <h4 className="font-display text-[15px] text-foreground">{VALVES[valve].name}</h4>
+            <span
+              className="rounded-[5px] px-2 py-[3px] font-mono text-[10px] uppercase tracking-[0.14em]"
+              style={{
+                color: valveOpen[valve](t) ? "var(--emerald)" : "var(--crimson)",
+                backgroundColor: `color-mix(in oklab, ${valveOpen[valve](t) ? "var(--emerald)" : "var(--crimson)"} 14%, transparent)`,
+              }}
+            >
+              {valveOpen[valve](t) ? "OPEN" : "CLOSED"}
+            </span>
+            <span className="font-mono text-[11px] text-muted-foreground">
+              {VALVES[valve].side} heart · {VALVES[valve].type}
+            </span>
+          </div>
+          <dl className="mt-4 grid gap-x-8 gap-y-4 md:grid-cols-2">
+            <Field label="Pressure relationship" value={VALVES[valve].gradient} />
+            <Field label="What opens it" value={VALVES[valve].opens} />
+            <Field label="What closes it" value={VALVES[valve].closes} />
+            <Field label="Associated heart sound" value={VALVES[valve].sound} />
+            <Field label="Clinical link" value={VALVES[valve].clinical} />
+          </dl>
         </div>
       )}
+
 
       {/* phase detail */}
       <div className="glass-panel rounded-xl p-5 md:p-6">
