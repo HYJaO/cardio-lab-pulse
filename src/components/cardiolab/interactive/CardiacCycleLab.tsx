@@ -194,26 +194,40 @@ export function CardiacCycleLab() {
       </div>
 
       {/* phase selector rail */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1">
+      <div
+        className="flex gap-1.5 overflow-x-auto pb-1"
+        role="tablist"
+        aria-label="Cardiac cycle phases"
+      >
         {PHASES.map((p) => {
           const active = p.id === detail.id;
+          const selected = p.id === selectedPhaseId;
           return (
             <button
               key={p.id}
               type="button"
+              role="tab"
+              aria-selected={selected}
               onMouseEnter={() => setHoverPhase(p)}
               onMouseLeave={() => setHoverPhase(null)}
+              onFocus={() => setHoverPhase(p)}
+              onBlur={() => setHoverPhase(null)}
               onClick={() => {
+                if (selected) {
+                  setSelectedPhaseId(null);
+                  return;
+                }
                 setPlaying(false);
                 setSelectedPhaseId(p.id);
                 setT(p.start + (p.end - p.start) / 2);
               }}
-              className="shrink-0 rounded-md border px-3 py-2 text-left transition-colors"
+              className="min-h-11 shrink-0 rounded-md border px-3 py-2 text-left transition-colors"
               style={{
                 borderColor: active ? "var(--cyan)" : "var(--hairline)",
                 backgroundColor: active
                   ? "color-mix(in oklab, var(--cyan) 12%, transparent)"
                   : "transparent",
+                opacity: selectedPhaseId && !selected ? 0.45 : 1,
               }}
             >
               <span className="block font-mono text-[10px] text-muted-foreground">
@@ -226,6 +240,19 @@ export function CardiacCycleLab() {
           );
         })}
       </div>
+      {selectedPhaseId && (
+        <p className="font-mono text-[11px] text-muted-foreground">
+          Phase focus on — unrelated phases dimmed.{" "}
+          <button
+            type="button"
+            onClick={() => setSelectedPhaseId(null)}
+            className="text-cyan underline-offset-4 hover:underline"
+          >
+            Clear focus
+          </button>
+        </p>
+      )}
+
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
         {/* charts */}
