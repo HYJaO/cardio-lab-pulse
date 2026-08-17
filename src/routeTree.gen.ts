@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicsCardiacCycleRouteImport } from './routes/topics.cardiac-cycle'
+import { Route as TopicsPvLoopsRouteImport } from './routes/topics.pv-loops'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +23,40 @@ const TopicsCardiacCycleRoute = TopicsCardiacCycleRouteImport.update({
   path: '/topics/cardiac-cycle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicsPvLoopsRoute = TopicsPvLoopsRouteImport.update({
+  id: '/topics/pv-loops',
+  path: '/topics/pv-loops',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
+  '/topics/pv-loops': typeof TopicsPvLoopsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
+  '/topics/pv-loops': typeof TopicsPvLoopsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
+  '/topics/pv-loops': typeof TopicsPvLoopsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/topics/cardiac-cycle'
+  fullPaths: '/' | '/topics/cardiac-cycle' | '/topics/pv-loops'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/topics/cardiac-cycle'
-  id: '__root__' | '/' | '/topics/cardiac-cycle'
+  to: '/' | '/topics/cardiac-cycle' | '/topics/pv-loops'
+  id: '__root__' | '/' | '/topics/cardiac-cycle' | '/topics/pv-loops'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TopicsCardiacCycleRoute: typeof TopicsCardiacCycleRoute
+  TopicsPvLoopsRoute: typeof TopicsPvLoopsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +75,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicsCardiacCycleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topics/pv-loops': {
+      id: '/topics/pv-loops'
+      path: '/topics/pv-loops'
+      fullPath: '/topics/pv-loops'
+      preLoaderRoute: typeof TopicsPvLoopsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TopicsCardiacCycleRoute: TopicsCardiacCycleRoute,
+  TopicsPvLoopsRoute: TopicsPvLoopsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
