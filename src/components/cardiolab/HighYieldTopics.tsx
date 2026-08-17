@@ -75,7 +75,7 @@ export function HighYieldTopics() {
       id="topics"
       eyebrow="Core Concepts"
       title="High-Yield Cardiovascular"
-      description="Every concept is tagged with a consistent taxonomy with exactly one primary tag, so mechanism, presentation and exam traps stay unambiguous. The Cardiac Cycle lab is live; the remaining labs are in development."
+      description="Every concept is tagged with a consistent taxonomy with exactly one primary tag, so mechanism, presentation and exam traps stay unambiguous. The Cardiac Cycle and Pressure–Volume Loop labs are live; the remaining labs are in development."
       className="border-y border-border/50 bg-surface/25"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
