@@ -181,7 +181,7 @@ export function PVLoopLab({ initialParams = PV_DEFAULTS }: PVLoopLabProps) {
         <figure className="glass-panel rounded-xl p-3 md:p-4">
           <svg
             viewBox={`0 0 ${W} ${H}`}
-            className="h-[320px] w-full sm:h-[400px] lg:h-[460px]"
+            className="h-auto w-full"
             role="img"
             aria-label={`Left ventricular pressure volume loop. End-diastolic volume ${Math.round(d.edv)} millilitres, end-systolic volume ${Math.round(d.esv)} millilitres, stroke volume ${Math.round(d.sv)} millilitres, ejection fraction ${Math.round(d.ef)} percent.`}
           >
