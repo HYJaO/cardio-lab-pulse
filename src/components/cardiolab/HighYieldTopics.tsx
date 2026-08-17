@@ -13,6 +13,16 @@ const TOPICS: Topic[] = [
     href: "/topics/cardiac-cycle",
   },
   {
+    title: "Pressure–Volume Loops",
+    description:
+      "Drive preload, afterload and contractility and watch EDV, ESV, stroke volume and ejection fraction move.",
+    difficulty: "Intermediate",
+    minutes: 26,
+    taxonomy: "high-yield",
+    preview: "starling",
+    href: "/topics/pv-loops",
+  },
+  {
     title: "Heart Failure",
     description:
       "Reduced versus preserved ejection fraction, compensatory neurohormonal loops and decompensation.",
