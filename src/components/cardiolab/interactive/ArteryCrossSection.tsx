@@ -71,7 +71,8 @@ export function ArteryCrossSection({
   label?: string;
 }) {
   const b = bulge(features.severity);
-  const capPath = `M${b.left} ${INTIMA_TOP} C${b.left + 50} ${b.top} ${b.mid - 30} ${b.top} ${b.mid} ${b.top} C${b.mid + 30} ${b.top} ${b.right - 50} ${b.top} ${b.right} ${INTIMA_TOP} Z`;
+  const capCurve = `C${b.left + 50} ${b.top} ${b.mid - 30} ${b.top} ${b.mid} ${b.top} C${b.mid + 30} ${b.top} ${b.right - 50} ${b.top} ${b.right} ${INTIMA_TOP}`;
+  const capPath = `M${b.left} ${INTIMA_TOP} ${capCurve} Z`;
   const corePath = `M${b.left + 40} ${INTIMA_TOP - 4} C${b.left + 80} ${b.top + 16} ${b.mid} ${b.top + 12} ${b.mid + 60} ${b.top + 20} C${b.right - 60} ${b.top + 30} ${b.right - 50} ${INTIMA_TOP - 4} ${b.right - 40} ${INTIMA_TOP - 4} Z`;
 
   const scale = zoom ? 1.14 : 1;
