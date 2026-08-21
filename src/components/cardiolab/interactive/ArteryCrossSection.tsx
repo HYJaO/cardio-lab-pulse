@@ -189,7 +189,7 @@ export function ArteryCrossSection({
           <path
             d={
               features.cap || features.lipid
-                ? `M0 ${INTIMA_TOP}H${b.left} ${capPath.slice(1).replace(" Z", "")} H${W}`
+                ? `M0 ${INTIMA_TOP}H${b.left} ${capCurve} H${W}`
                 : `M0 ${INTIMA_TOP}H${W}`
             }
             fill="none"

@@ -11,7 +11,7 @@ export type Topic = {
   taxonomy: TaxonomyKind;
   preview: "cycle" | "failure" | "plaque" | "block" | "starling" | "murmur";
   /** Present only when a real interactive lesson exists. */
-  href?: "/topics/cardiac-cycle" | "/topics/pv-loops";
+  href?: "/topics/cardiac-cycle" | "/topics/pv-loops" | "/topics/atherosclerosis";
 };
 
 function Preview({ kind }: { kind: Topic["preview"] }) {
