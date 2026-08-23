@@ -297,6 +297,25 @@ export function PVLoopLab({ initialParams = PV_DEFAULTS }: PVLoopLabProps) {
               </text>
             </g>
 
+            {/* valve events + heart sounds at the loop corners */}
+            <g>
+              <circle cx={sx(d.edv)} cy={sy(d.pOpen)} r="3" fill="var(--electric)" />
+              <text x={sx(d.edv) + 8} y={sy(d.pOpen) + 4} fontSize="10.5" className="font-mono" fill="var(--electric)">
+                aortic opens
+              </text>
+              <text x={sx(d.edv) + 8} y={sy(d.edp) - 6} fontSize="10.5" className="font-mono" fill="var(--amber)">
+                S1 · mitral closes
+              </text>
+              <text x={sx(d.esv) - 8} y={sy(d.pes) + 14} textAnchor="end" fontSize="10.5" className="font-mono" fill="var(--amber)">
+                S2 · aortic closes
+              </text>
+              <circle cx={sx(d.esv)} cy={sy(edpvr(d.esv) + 1)} r="3" fill="var(--electric)" />
+              <text x={sx(d.esv) - 8} y={sy(edpvr(d.esv) + 1) - 6} textAnchor="end" fontSize="10.5" className="font-mono" fill="var(--electric)">
+                mitral opens
+              </text>
+            </g>
+
+
             {/* cursor */}
             <circle cx={sx(cursor.v)} cy={sy(cursor.p)} r="6" fill="var(--cyan)" />
             <circle cx={sx(cursor.v)} cy={sy(cursor.p)} r="11" fill="none" stroke="var(--cyan)" strokeOpacity="0.4" />
