@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicsAtherosclerosisRouteImport } from './routes/topics.atherosclerosis'
 import { Route as TopicsCardiacCycleRouteImport } from './routes/topics.cardiac-cycle'
+import { Route as TopicsHeartFailureRouteImport } from './routes/topics.heart-failure'
 import { Route as TopicsPvLoopsRouteImport } from './routes/topics.pv-loops'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const TopicsCardiacCycleRoute = TopicsCardiacCycleRouteImport.update({
   path: '/topics/cardiac-cycle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicsHeartFailureRoute = TopicsHeartFailureRouteImport.update({
+  id: '/topics/heart-failure',
+  path: '/topics/heart-failure',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TopicsPvLoopsRoute = TopicsPvLoopsRouteImport.update({
   id: '/topics/pv-loops',
   path: '/topics/pv-loops',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/topics/atherosclerosis': typeof TopicsAtherosclerosisRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
+  '/topics/heart-failure': typeof TopicsHeartFailureRoute
   '/topics/pv-loops': typeof TopicsPvLoopsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/topics/atherosclerosis': typeof TopicsAtherosclerosisRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
+  '/topics/heart-failure': typeof TopicsHeartFailureRoute
   '/topics/pv-loops': typeof TopicsPvLoopsRoute
 }
 export interface FileRoutesById {
@@ -52,6 +60,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/topics/atherosclerosis': typeof TopicsAtherosclerosisRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
+  '/topics/heart-failure': typeof TopicsHeartFailureRoute
   '/topics/pv-loops': typeof TopicsPvLoopsRoute
 }
 export interface FileRouteTypes {
@@ -60,18 +69,21 @@ export interface FileRouteTypes {
     | '/'
     | '/topics/atherosclerosis'
     | '/topics/cardiac-cycle'
+    | '/topics/heart-failure'
     | '/topics/pv-loops'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/topics/atherosclerosis'
     | '/topics/cardiac-cycle'
+    | '/topics/heart-failure'
     | '/topics/pv-loops'
   id:
     | '__root__'
     | '/'
     | '/topics/atherosclerosis'
     | '/topics/cardiac-cycle'
+    | '/topics/heart-failure'
     | '/topics/pv-loops'
   fileRoutesById: FileRoutesById
 }
@@ -79,6 +91,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   TopicsAtherosclerosisRoute: typeof TopicsAtherosclerosisRoute
   TopicsCardiacCycleRoute: typeof TopicsCardiacCycleRoute
+  TopicsHeartFailureRoute: typeof TopicsHeartFailureRoute
   TopicsPvLoopsRoute: typeof TopicsPvLoopsRoute
 }
 
@@ -105,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicsCardiacCycleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topics/heart-failure': {
+      id: '/topics/heart-failure'
+      path: '/topics/heart-failure'
+      fullPath: '/topics/heart-failure'
+      preLoaderRoute: typeof TopicsHeartFailureRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/topics/pv-loops': {
       id: '/topics/pv-loops'
       path: '/topics/pv-loops'
@@ -119,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   TopicsAtherosclerosisRoute: TopicsAtherosclerosisRoute,
   TopicsCardiacCycleRoute: TopicsCardiacCycleRoute,
+  TopicsHeartFailureRoute: TopicsHeartFailureRoute,
   TopicsPvLoopsRoute: TopicsPvLoopsRoute,
 }
 export const routeTree = rootRouteImport
