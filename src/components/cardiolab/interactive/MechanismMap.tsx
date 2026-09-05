@@ -26,7 +26,7 @@ export function MechanismMap({
   /** Optional morphology renderer; defaults to the arterial-wall section. */
   renderVisual?: (stageId: string, zoom: boolean) => React.ReactNode;
   /** Optional external stage selection, used by linked evidence views. */
-  selectedStageId?: string;
+  selectedStageId?: string | undefined;
 }) {
   const stages = pathway.stages;
   const [index, setIndex] = useState(0);

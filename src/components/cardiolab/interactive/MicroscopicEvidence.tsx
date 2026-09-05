@@ -27,8 +27,7 @@ type EvidenceStage = {
   alt: string;
 };
 
-const EVIDENCE_STAGES: EvidenceStage[] = [
-  {
+const EARLY_STAGE: EvidenceStage = {
     id: "early",
     label: "Early",
     diagnosis: "Pathological intimal thickening",
@@ -38,7 +37,10 @@ const EVIDENCE_STAGES: EvidenceStage[] = [
     position: "center 0%",
     labels: ["Intima", "Extracellular lipid"],
     alt: "H&E-stained arterial section showing pathological intimal thickening and extracellular lipid without a necrotic core.",
-  },
+  };
+
+const EVIDENCE_STAGES: EvidenceStage[] = [
+  EARLY_STAGE,
   {
     id: "advanced",
     label: "Advanced",
@@ -76,7 +78,7 @@ export function MicroscopicEvidence({
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<EvidenceStage["id"]>("early");
   const [detailOpen, setDetailOpen] = useState(false);
-  const selected = EVIDENCE_STAGES.find((stage) => stage.id === selectedId) ?? EVIDENCE_STAGES[0];
+  const selected = EVIDENCE_STAGES.find((stage) => stage.id === selectedId) ?? EARLY_STAGE;
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="mt-6 border-t border-border/50 pt-5">
