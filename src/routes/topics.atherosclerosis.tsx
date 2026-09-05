@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { TopicPage } from "@/components/cardiolab/topic/TopicPage";
 import { ContentBlock } from "@/components/cardiolab/topic/ContentBlock";
 import { ActiveRecall } from "@/components/cardiolab/topic/ActiveRecall";
 import { MechanismMap } from "@/components/cardiolab/interactive/MechanismMap";
 import { AssociationChain } from "@/components/cardiolab/interactive/AssociationChain";
+import { MicroscopicEvidence } from "@/components/cardiolab/interactive/MicroscopicEvidence";
 import { ATHEROSCLEROSIS } from "@/lib/mechanism-map";
 
 const TITLE = "Atherosclerosis — Interactive Mechanism Map | CardioLab";
@@ -104,6 +106,8 @@ const RELATED: { title: string; note: string; to?: "/topics/cardiac-cycle" | "/t
   ];
 
 function AtherosclerosisTopic() {
+  const [selectedMapStage, setSelectedMapStage] = useState<string>();
+
   return (
     <TopicPage
       module="Cardiovascular · Pathology"
@@ -144,7 +148,13 @@ function AtherosclerosisTopic() {
               title="Interactive mechanism map"
               lede="Ten stages in causal order. Select a stage to focus the arterial-wall section on that morphology and read what happens, why, the key players, the clinical consequence and the exam associations. Use Prev/Next, play the pathway, or press the left and right arrow keys; Home restarts."
             >
-              <MechanismMap pathway={ATHEROSCLEROSIS} />
+              <MechanismMap pathway={ATHEROSCLEROSIS} selectedStageId={selectedMapStage} />
+              <MicroscopicEvidence
+                onMapStage={(stageId) => {
+                  setSelectedMapStage(stageId);
+                  document.getElementById("mechanism")?.scrollIntoView({ block: "start" });
+                }}
+              />
             </ContentBlock>
           ),
         },

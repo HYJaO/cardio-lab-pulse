@@ -20,10 +20,13 @@ const STEP_MS = 4200;
 export function MechanismMap({
   pathway,
   renderVisual,
+  selectedStageId,
 }: {
   pathway: MechanismPathway;
   /** Optional morphology renderer; defaults to the arterial-wall section. */
   renderVisual?: (stageId: string, zoom: boolean) => React.ReactNode;
+  /** Optional external stage selection, used by linked evidence views. */
+  selectedStageId?: string;
 }) {
   const stages = pathway.stages;
   const [index, setIndex] = useState(0);
@@ -41,6 +44,14 @@ export function MechanismMap({
     setZoom(true);
     window.setTimeout(() => setZoom(false), 520);
   }, []);
+
+  useEffect(() => {
+    if (!selectedStageId) return;
+    const requestedIndex = stages.findIndex((candidate) => candidate.id === selectedStageId);
+    if (requestedIndex < 0) return;
+    setPlaying(false);
+    select(requestedIndex);
+  }, [selectedStageId, select, stages]);
 
   const goPrev = useCallback(() => {
     setPlaying(false);
