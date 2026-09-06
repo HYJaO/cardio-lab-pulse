@@ -99,7 +99,7 @@ export function MechanismMap({
       <ArteryCrossSection
         features={features}
         zoom={zoom}
-        animate={!prefersReducedMotion()}
+        animate
         label={`Arterial wall at stage ${index + 1}: ${stage.label}`}
       />
     );

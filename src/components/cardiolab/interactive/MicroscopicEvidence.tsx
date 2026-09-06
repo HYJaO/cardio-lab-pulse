@@ -190,11 +190,11 @@ export function MicroscopicEvidence({
             <DialogTitle>{selected.label}: {selected.diagnosis}</DialogTitle>
             <DialogDescription>{selected.finding} H&amp;E stain.</DialogDescription>
           </DialogHeader>
-          <div className="overflow-hidden rounded-md border border-hairline bg-muted">
+          <div className="relative aspect-[16/8] min-h-56 overflow-hidden rounded-md border border-hairline bg-muted">
             <img
               src={histologyAsset.url}
               alt={selected.alt}
-              className="max-h-[65vh] w-full object-cover"
+              className="absolute inset-0 h-full w-full object-cover"
               style={{ objectPosition: selected.position }}
             />
           </div>
