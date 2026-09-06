@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ChevronDown, ExternalLink, Microscope, ScanSearch } from "lucide-react";
+import { useId, useState } from "react";
+import { ChevronDown, LocateFixed, Microscope, ScanSearch } from "lucide-react";
 import histologyAsset from "@/assets/atherosclerosis-histology.jpg.asset.json";
 import { Button } from "@/components/ui/button";
 import {
@@ -28,16 +28,16 @@ type EvidenceStage = {
 };
 
 const EARLY_STAGE: EvidenceStage = {
-    id: "early",
-    label: "Early",
-    diagnosis: "Pathological intimal thickening",
-    finding: "Extracellular lipid within a thickened intima, without true necrosis.",
-    mapStageId: "ldl-entry",
-    mapStageLabel: "LDL entry & retention",
-    position: "center 0%",
-    labels: ["Intima", "Extracellular lipid"],
-    alt: "H&E-stained arterial section showing pathological intimal thickening and extracellular lipid without a necrotic core.",
-  };
+  id: "early",
+  label: "Early",
+  diagnosis: "Pathological intimal thickening",
+  finding: "Extracellular lipid within a thickened intima, without true necrosis.",
+  mapStageId: "ldl-entry",
+  mapStageLabel: "LDL entry & retention",
+  position: "center 0%",
+  labels: ["Intima", "Extracellular lipid"],
+  alt: "H&E-stained arterial section showing pathological intimal thickening and extracellular lipid without a necrotic core.",
+};
 
 const EVIDENCE_STAGES: EvidenceStage[] = [
   EARLY_STAGE,
@@ -79,6 +79,8 @@ export function MicroscopicEvidence({
   const [selectedId, setSelectedId] = useState<EvidenceStage["id"]>("early");
   const [detailOpen, setDetailOpen] = useState(false);
   const selected = EVIDENCE_STAGES.find((stage) => stage.id === selectedId) ?? EARLY_STAGE;
+  const titleId = useId();
+  const annotationTitleId = useId();
 
   return (
     <Collapsible open={open} onOpenChange={setOpen} className="mt-6 border-t border-border/50 pt-5">
@@ -88,7 +90,7 @@ export function MicroscopicEvidence({
             <Microscope className="h-4 w-4" aria-hidden="true" />
           </span>
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-cyan">Microscopic evidence</p>
+            <h3 id={titleId} className="font-mono text-[10px] uppercase tracking-[0.16em] text-cyan">Microscopic evidence</h3>
             <p className="mt-0.5 text-[12.5px] text-muted-foreground">Representative H&amp;E sections</p>
           </div>
         </div>
@@ -101,13 +103,17 @@ export function MicroscopicEvidence({
       </div>
 
       <CollapsibleContent className="mt-5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 motion-reduce:animate-none">
-        <div className="overflow-hidden rounded-lg border border-hairline bg-surface/25">
+        <div className="overflow-hidden rounded-lg border border-hairline bg-surface/25" aria-labelledby={titleId}>
           <div className="grid gap-0 lg:grid-cols-[minmax(0,1.55fr)_minmax(260px,0.75fr)]">
             <figure className="min-w-0 border-b border-hairline lg:border-b-0 lg:border-r">
               <div className="relative aspect-[16/7] min-h-48 overflow-hidden bg-muted sm:min-h-64">
                 <img
                   src={histologyAsset.url}
                   alt={selected.alt}
+                  width={896}
+                  height={1119}
+                  loading="lazy"
+                  decoding="async"
                   className="h-full w-full object-cover"
                   style={{ objectPosition: selected.position }}
                 />
@@ -119,8 +125,8 @@ export function MicroscopicEvidence({
               </figcaption>
             </figure>
 
-            <aside className="flex flex-col p-4 md:p-5" aria-label="Histology annotations">
-              <p className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">CardioLab labels</p>
+            <aside className="flex flex-col p-4 md:p-5" aria-labelledby={annotationTitleId}>
+              <h4 id={annotationTitleId} className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">CardioLab labels</h4>
               <ul className="mt-3 space-y-2">
                 {selected.labels.map((label) => (
                   <li key={label} className="flex items-center gap-2 text-[12.5px] text-foreground">
@@ -137,7 +143,7 @@ export function MicroscopicEvidence({
                   onClick={() => onMapStage?.(selected.mapStageId)}
                 >
                   Map stage: {selected.mapStageLabel}
-                  <ExternalLink aria-hidden="true" />
+                  <LocateFixed aria-hidden="true" />
                 </Button>
                 <Button size="sm" className="w-full" onClick={() => setDetailOpen(true)}>
                   <ScanSearch aria-hidden="true" />
@@ -156,8 +162,9 @@ export function MicroscopicEvidence({
                   type="button"
                   variant="outline"
                   aria-pressed={active}
+                   aria-label={`${stage.label}: ${stage.diagnosis}`}
                   onClick={() => setSelectedId(stage.id)}
-                  className={`h-auto min-w-0 flex-col items-start whitespace-normal px-3 py-2 text-left ${active ? "border-cyan bg-cyan/10" : ""}`}
+                   className={`h-auto min-h-11 min-w-0 flex-col items-start whitespace-normal px-3 py-2 text-left ${active ? "border-cyan bg-cyan/10" : ""}`}
                 >
                   <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-cyan">{stage.label}</span>
                   <span className="mt-1 text-[12px] leading-snug text-foreground">{stage.diagnosis}</span>
@@ -165,6 +172,9 @@ export function MicroscopicEvidence({
               );
             })}
           </div>
+          <p className="sr-only" role="status" aria-live="polite">
+            Showing {selected.label.toLowerCase()} histology: {selected.diagnosis}. {selected.finding}
+          </p>
         </div>
 
         <p className="mt-3 text-[11.5px] leading-relaxed text-muted-foreground">
@@ -194,6 +204,9 @@ export function MicroscopicEvidence({
             <img
               src={histologyAsset.url}
               alt={selected.alt}
+              width={896}
+              height={1119}
+              decoding="async"
               className="absolute inset-0 h-full w-full object-cover"
               style={{ objectPosition: selected.position }}
             />

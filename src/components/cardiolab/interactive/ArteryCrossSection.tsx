@@ -86,10 +86,10 @@ export function ArteryCrossSection({
         aria-label={label ?? "Arterial wall cross-section"}
       >
         <g
+          className={animate ? "transition-transform duration-500 motion-reduce:transition-none" : undefined}
           style={{
             transform: `scale(${scale})`,
             transformOrigin: `${b.mid}px ${INTIMA_TOP}px`,
-            transition: animate ? "transform 500ms ease" : undefined,
           }}
         >
           {/* adventitia */}
@@ -130,7 +130,7 @@ export function ArteryCrossSection({
               fillOpacity={0.18 + features.severity * 0.2}
               stroke="var(--amber)"
               strokeOpacity="0.5"
-              style={{ transition: animate ? "all 500ms ease" : undefined }}
+              className={animate ? "transition-all duration-500 motion-reduce:transition-none" : undefined}
             />
           )}
 
@@ -144,7 +144,7 @@ export function ArteryCrossSection({
               strokeOpacity="0.75"
               strokeWidth={features.rupture ? 1 : 1.6}
               strokeDasharray={features.rupture ? "26 12" : undefined}
-              style={{ transition: animate ? "all 500ms ease" : undefined }}
+              className={animate ? "transition-all duration-500 motion-reduce:transition-none" : undefined}
             />
           )}
           {features.necroticCore && (

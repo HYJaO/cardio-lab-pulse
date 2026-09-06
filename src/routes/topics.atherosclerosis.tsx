@@ -151,7 +151,8 @@ function AtherosclerosisTopic() {
               <MechanismMap pathway={ATHEROSCLEROSIS} selectedStageId={selectedMapStage} />
               <MicroscopicEvidence
                 onMapStage={(stageId) => {
-                  setSelectedMapStage(stageId);
+                  setSelectedMapStage(undefined);
+                  window.requestAnimationFrame(() => setSelectedMapStage(stageId));
                   document.getElementById("mechanism")?.scrollIntoView({ block: "start" });
                 }}
               />
