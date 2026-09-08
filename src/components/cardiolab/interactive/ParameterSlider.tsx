@@ -23,12 +23,12 @@ export function ParameterSlider({
   onChange: (v: number) => void;
 }) {
   return (
-    <div className="rounded-lg border border-hairline bg-surface/30 p-3">
+    <div className="rounded-md border border-hairline bg-background/55 p-3">
       <div className="flex items-baseline justify-between gap-3">
         <label htmlFor={id} className="text-[13px] font-medium text-foreground">
           {label}
         </label>
-        <span className="font-mono text-[12px] text-cyan">
+        <span className="telemetry-value text-[12px] text-cyan">
           {display ?? value} <span className="text-muted-foreground">{unit}</span>
         </span>
       </div>
@@ -41,7 +41,7 @@ export function ParameterSlider({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         aria-valuetext={`${display ?? value} ${unit}`}
-        className="mt-3 w-full accent-[var(--cyan)]"
+        className="mt-3 w-full"
       />
       {hint && (
         <p className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">

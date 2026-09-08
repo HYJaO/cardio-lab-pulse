@@ -19,9 +19,9 @@ export function ContentBlock({
   children?: ReactNode;
 }) {
   return (
-    <section id={id} className="scroll-mt-24 border-t border-border/50 pt-10 md:pt-14">
+    <section id={id} className="scroll-mt-24 border-t border-border pt-10 md:pt-14">
       <TaxonomyBadge kind={tag} />
-      <h2 className="mt-4 text-2xl font-semibold text-foreground md:text-[2rem] md:leading-[1.15]">
+      <h2 className="mt-4 max-w-4xl text-2xl font-semibold text-foreground md:text-[2.2rem] md:leading-[1.1]">
         {title}
       </h2>
       {lede && (
