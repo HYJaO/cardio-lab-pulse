@@ -18,12 +18,12 @@ export function PlaybackControls({
   label?: string;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="telemetry-bar flex flex-wrap items-center gap-2 rounded-md border border-hairline p-2">
       <button
         type="button"
         onClick={onToggle}
         aria-label={playing ? "Pause animation" : "Play animation"}
-        className="inline-flex items-center gap-2 rounded-md border border-hairline bg-surface/40 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground transition-colors hover:border-cyan/50 hover:text-cyan"
+        className="inline-flex items-center gap-2 rounded border border-cyan/35 bg-cyan/10 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-cyan transition-colors hover:border-cyan"
       >
         {playing ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
         {playing ? "Pause" : "Play"}
@@ -32,7 +32,7 @@ export function PlaybackControls({
         type="button"
         onClick={onRestart}
         aria-label="Restart cycle"
-        className="inline-flex items-center gap-2 rounded-md border border-hairline bg-surface/40 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-cyan/50 hover:text-cyan"
+        className="inline-flex items-center gap-2 rounded border border-hairline bg-surface/40 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-cyan/50 hover:text-cyan"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         Restart
@@ -40,7 +40,7 @@ export function PlaybackControls({
       <div
         role="group"
         aria-label="Animation speed"
-        className="ml-auto flex items-center gap-1 rounded-md border border-hairline bg-surface/40 p-1"
+        className="ml-auto flex items-center gap-1 rounded border border-hairline bg-background/70 p-1"
       >
         {SPEEDS.map((s) => (
           <button

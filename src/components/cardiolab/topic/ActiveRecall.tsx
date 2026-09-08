@@ -13,7 +13,7 @@ export function ActiveRecall({ items }: { items: RecallItem[] }) {
       {items.map((item, i) => {
         const shown = open.includes(i);
         return (
-          <div key={item.q} className="glass-panel rounded-xl p-4 md:p-5">
+          <div key={item.q} className="console-panel p-4 md:p-5">
             <div className="flex items-start gap-4">
               <span className="mt-0.5 font-mono text-[11px] text-cyan">
                 {String(i + 1).padStart(2, "0")}

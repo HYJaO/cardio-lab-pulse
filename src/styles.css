@@ -59,59 +59,51 @@
 :root {
   --radius: 0.5rem;
 
-  --background: oklch(0.16 0.035 260);
-  --foreground: oklch(0.96 0.008 240);
+  --background: oklch(0.145 0.014 255);
+  --foreground: oklch(0.97 0.006 245);
 
-  --surface: oklch(0.21 0.038 259);
-  --surface-raised: oklch(0.25 0.04 258);
-  --hairline: oklch(0.42 0.045 255 / 40%);
+  --surface: oklch(0.19 0.019 255);
+  --surface-raised: oklch(0.235 0.025 255);
+  --hairline: oklch(0.88 0.012 245 / 12%);
 
-  --card: oklch(0.21 0.038 259);
+  --card: oklch(0.19 0.019 255);
   --card-foreground: oklch(0.96 0.008 240);
-  --popover: oklch(0.19 0.036 259);
+  --popover: oklch(0.175 0.017 255);
   --popover-foreground: oklch(0.96 0.008 240);
 
-  --primary: oklch(0.72 0.14 220);
-  --primary-foreground: oklch(0.16 0.035 260);
-  --secondary: oklch(0.27 0.04 258);
+  --primary: oklch(0.75 0.15 210);
+  --primary-foreground: oklch(0.145 0.014 255);
+  --secondary: oklch(0.235 0.025 255);
   --secondary-foreground: oklch(0.94 0.01 240);
-  --muted: oklch(0.24 0.035 258);
-  --muted-foreground: oklch(0.72 0.025 250);
-  --accent: oklch(0.3 0.05 250);
+  --muted: oklch(0.22 0.022 255);
+  --muted-foreground: oklch(0.69 0.025 250);
+  --accent: oklch(0.26 0.032 250);
   --accent-foreground: oklch(0.96 0.008 240);
   --destructive: oklch(0.58 0.2 22);
   --destructive-foreground: oklch(0.97 0.01 240);
-  --border: oklch(0.35 0.04 255 / 45%);
-  --input: oklch(0.35 0.04 255 / 55%);
-  --ring: oklch(0.72 0.14 220);
+  --border: oklch(0.88 0.012 245 / 9%);
+  --input: oklch(0.88 0.012 245 / 14%);
+  --ring: oklch(0.75 0.15 210);
 
-  --cyan: oklch(0.82 0.13 200);
+  --cyan: oklch(0.75 0.15 210);
   --teal: oklch(0.75 0.12 185);
-  --electric: oklch(0.66 0.19 255);
-  --crimson: oklch(0.62 0.21 20);
-  --amber: oklch(0.79 0.14 78);
+  --electric: oklch(0.69 0.17 245);
+  --crimson: oklch(0.62 0.22 25);
+  --amber: oklch(0.78 0.16 75);
   --emerald: oklch(0.75 0.14 160);
   --violet: oklch(0.7 0.16 300);
   --oxblood: oklch(0.45 0.16 20);
 
-  --gradient-hero: radial-gradient(
-      1200px 600px at 70% 10%,
-      color-mix(in oklab, var(--electric) 22%, transparent),
-      transparent 70%
-    ),
-    radial-gradient(
-      900px 500px at 10% 40%,
-      color-mix(in oklab, var(--cyan) 12%, transparent),
-      transparent 70%
-    );
+  --gradient-hero: linear-gradient(115deg, color-mix(in oklab, var(--surface) 58%, transparent), transparent 46%),
+    radial-gradient(900px 440px at 78% 28%, color-mix(in oklab, var(--crimson) 9%, transparent), transparent 68%);
   --gradient-line: linear-gradient(
     90deg,
     transparent,
     color-mix(in oklab, var(--cyan) 60%, transparent),
     transparent
   );
-  --shadow-elevated: 0 30px 80px -40px oklch(0 0 0 / 85%);
-  --shadow-glow: 0 0 60px -18px color-mix(in oklab, var(--cyan) 55%, transparent);
+  --shadow-elevated: 0 24px 70px -38px oklch(0 0 0 / 94%);
+  --shadow-glow: 0 0 42px -16px color-mix(in oklab, var(--cyan) 58%, transparent);
 }
 
 @layer base {
@@ -128,6 +120,8 @@
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    text-wrap: pretty;
+    overflow-x: hidden;
   }
 
   h1,
@@ -135,7 +129,7 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
   }
 
   ::selection {
@@ -148,6 +142,40 @@
   }
 }
 
+@utility console-panel {
+  background: linear-gradient(180deg, color-mix(in oklab, var(--surface-raised) 44%, transparent), color-mix(in oklab, var(--surface) 72%, transparent));
+  border: 1px solid var(--hairline);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-elevated);
+}
+
+@utility monitor-viewport {
+  background-color: color-mix(in oklab, var(--background) 90%, var(--surface));
+  background-image: linear-gradient(to right, color-mix(in oklab, var(--cyan) 3%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--cyan) 3%, transparent) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@utility telemetry-bar {
+  background: color-mix(in oklab, var(--background) 78%, transparent);
+  border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@utility telemetry-value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+@utility trace-glow-cyan {
+  filter: drop-shadow(0 0 5px color-mix(in oklab, var(--cyan) 48%, transparent));
+}
+
+@utility trace-glow-crimson {
+  filter: drop-shadow(0 0 5px color-mix(in oklab, var(--crimson) 48%, transparent));
+}
+
 @utility glass-panel {
   background: linear-gradient(
     160deg,
@@ -155,7 +183,9 @@
     color-mix(in oklab, var(--surface) 60%, transparent)
   );
   border: 1px solid var(--hairline);
-  backdrop-filter: blur(18px) saturate(130%);
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-elevated);
+  backdrop-filter: blur(14px) saturate(115%);
 }
 
 @utility hairline-x {
@@ -177,7 +207,7 @@
 @utility eyebrow {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
-  letter-spacing: 0.32em;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--cyan);
 }
@@ -185,15 +215,30 @@
 @utility grid-field {
   background-image: linear-gradient(
       to right,
-      color-mix(in oklab, var(--cyan) 7%, transparent) 1px,
+      color-mix(in oklab, var(--cyan) 3%, transparent) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in oklab, var(--cyan) 7%, transparent) 1px,
+      color-mix(in oklab, var(--cyan) 3%, transparent) 1px,
       transparent 1px
     );
-  background-size: 44px 44px;
+  background-size: 24px 24px;
+}
+
+input[type="range"] {
+  height: 1.75rem;
+  cursor: pointer;
+  accent-color: var(--cyan);
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 2px;
+  background: repeating-linear-gradient(90deg, var(--hairline) 0 1px, transparent 1px 10%), color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  margin-top: -6px;
 }
 
 @keyframes cl-pulse {
