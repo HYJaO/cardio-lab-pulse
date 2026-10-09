@@ -15,7 +15,8 @@ export type Topic = {
     | "/topics/cardiac-cycle"
     | "/topics/pv-loops"
     | "/topics/atherosclerosis"
-    | "/topics/heart-failure";
+    | "/topics/heart-failure"
+    | "/topics/heart-murmurs";
 };
 
 function Preview({ kind }: { kind: Topic["preview"] }) {
