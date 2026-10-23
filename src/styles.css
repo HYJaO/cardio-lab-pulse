@@ -307,3 +307,10 @@ input[type="range"]::-webkit-slider-thumb {
     scroll-behavior: auto;
   }
 }
+
+:root {
+  --ecg-paper: oklch(0.97 0.012 20);
+  --ecg-grid-fine: oklch(0.82 0.08 20);
+  --ecg-grid-major: oklch(0.62 0.17 22);
+  --ecg-ink: oklch(0.2 0.02 255);
+}
