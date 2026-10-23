@@ -5,6 +5,7 @@ const NAV = [
   ["PV Loops", "/topics/pv-loops"],
   ["Heart Failure", "/topics/heart-failure"],
   ["Atherosclerosis", "/topics/atherosclerosis"],
+  ["ECG Patterns", "/topics/ecg-patterns"],
 ];
 
 export function Navbar() {

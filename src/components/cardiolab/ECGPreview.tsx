@@ -15,7 +15,7 @@ export function ECGPreview() {
       id="ecg"
       eyebrow="ECG Laboratory"
       title="Read the trace, not the textbook"
-      description="A calibrated 25 mm/s strip with wave-by-wave annotation. The full interactive laboratory arrives in the next phase."
+      description="A calibrated 25 mm/s strip with wave-by-wave annotation. Explore axis, electrodes and high-yield patterns in the full lab."
     >
       <div className="glass-panel overflow-hidden rounded-2xl" style={{ boxShadow: "var(--shadow-elevated)" }}>
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-b border-border/60 px-5 py-3 font-mono text-[11px] text-muted-foreground">
@@ -99,6 +99,7 @@ export function ECGPreview() {
       <p className="mt-4 font-mono text-[11px] text-muted-foreground sm:hidden">
         P · QRS · T annotated on wider screens
       </p>
+      <a href="/topics/ecg-patterns" className="mt-6 inline-flex min-h-11 items-center rounded-md bg-cyan px-5 text-[13px] font-semibold text-primary-foreground">Open ECG Patterns lab →</a>
     </Section>
   );
 }
