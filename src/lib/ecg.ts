@@ -236,16 +236,16 @@ export function makeTrace(
       duration: timing.duration,
       pTimes: timing.pTimes,
       pAmp: opts.pAmp ?? pAmpFor(label),
-      pW: opts.pW,
+      ...(opts.pW === undefined ? {} : { pW: opts.pW }),
       beats: timing.qrsTimes.map((at, i) => ({ at, complex: complexFor(i) })),
-      baseline: opts.baseline,
-      prSeg: opts.prSeg,
+      ...(opts.baseline === undefined ? {} : { baseline: opts.baseline }),
+      ...(opts.prSeg === undefined ? {} : { prSeg: opts.prSeg }),
     },
   };
 }
 
 export function stripFigure(traces: Trace[], description: string, rowHeight?: number): EcgFigure {
-  return { rows: traces.map((t) => [t]), cellDuration: traces[0].rhythm.duration, rowHeight, description };
+  return { rows: traces.map((t) => [t]), cellDuration: traces[0]?.rhythm.duration ?? 0, ...(rowHeight === undefined ? {} : { rowHeight }), description };
 }
 
 export function twelveLead(
@@ -256,7 +256,10 @@ export function twelveLead(
   const timing = sinusTiming(opts.rate ?? 75, 2.5, opts.pr ?? 0.16);
   return {
     rows: GRID_ORDER.map((row) =>
-      row.map((lead) => makeTrace(lead, timing, () => complexFor(lead), { prSeg: opts.prSegFor?.(lead) })),
+      row.map((lead) => {
+        const prSeg = opts.prSegFor?.(lead);
+        return makeTrace(lead, timing, () => complexFor(lead), prSeg === undefined ? {} : { prSeg });
+      }),
     ),
     cellDuration: 2.5,
     description,
@@ -266,7 +269,7 @@ export function twelveLead(
 /** Six limb leads (2 × 3 layout) for a given frontal axis. */
 export function axisFigure(axis: number): EcgFigure {
   const timing = sinusTiming(75, 1.6, 0.16, 0.35);
-  const tr = (id: LimbLeadId) => makeTrace(id, timing, () => limbComplex(projection(axis, limbAngle(id)!)));
+  const tr = (id: LimbLeadId) => makeTrace(id, timing, () => limbComplex(projection(axis, limbAngle(id) ?? 0)));
   return {
     rows: [
       [tr("I"), tr("aVR")],
