@@ -106,7 +106,7 @@ export function AxisExplorer() {
             onChange={(e) => { setAxis(Number(e.target.value)); setResult(null); }} className="mt-3 w-full" />
           <p className="mt-2 font-semibold text-foreground">{AXIS_LABEL[cls]}</p>
           {note && <p className="mt-1 text-[12.5px] text-amber">{note}</p>}
-          <p className="mt-2 font-mono text-[10.5px] text-muted-foreground">Normal −30° ≤ axis ≤ +90° · LAD −90° ≤ axis < −30° · RAD +90° < axis ≤ +180° · Extreme −180° < axis < −90°; ±180° assigned to RAD.</p>
+          <p className="mt-2 font-mono text-[10.5px] text-muted-foreground">{"Normal −30° ≤ axis ≤ +90° · LAD −90° ≤ axis < −30° · RAD +90° < axis ≤ +180° · Extreme −180° < axis < −90°; ±180° assigned to RAD."}</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
