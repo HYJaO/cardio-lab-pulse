@@ -53,15 +53,13 @@ export function EcgPaper({ figure, minWidth }: { figure: EcgFigure; minWidth?: n
               </text>
             </g>
           ))}
-          <text x="1" y={H - 1.5} fontSize="2.4" fill="var(--ecg-ink)" fontFamily="var(--font-mono)">
-            25 mm/s · 10 mm/mV
-          </text>
-          <text x={W - 1} y={H - 1.5} fontSize="2.4" textAnchor="end" fill="var(--ecg-ink)" fontFamily="var(--font-mono)">
-            Educational illustration — not patient data
-          </text>
         </svg>
       </div>
-      <figcaption className="sr-only">{figure.description}</figcaption>
+      <figcaption className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-t border-hairline bg-surface px-3 py-2 font-mono text-[10px] text-muted-foreground">
+        <span>25 mm/s · 10 mm/mV</span>
+        <span>Educational illustration — not patient data</span>
+        <span className="sr-only">{figure.description}</span>
+      </figcaption>
     </figure>
   );
 }

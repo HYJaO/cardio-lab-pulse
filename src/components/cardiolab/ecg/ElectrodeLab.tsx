@@ -1,7 +1,8 @@
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
 type E = { id: string; x: number; y: number; where: string; leads: string[] };
-const ELECTRODES: E[] = [
+export const ELECTRODES: E[] = [
   { id: "RA", x: 35, y: 335, where: "Right wrist (inner forearm). Clinical variant: proximal right arm or right shoulder for monitoring/exercise testing — this changes limb-lead amplitudes slightly.", leads: ["I", "II", "aVR"] },
   { id: "LA", x: 325, y: 335, where: "Left wrist (inner forearm). Variant: proximal left arm or shoulder.", leads: ["I", "III", "aVL"] },
   { id: "RL", x: 145, y: 565, where: "Right ankle. Ground/reference electrode — it forms no lead. Variant: lower abdomen.", leads: [] },
@@ -17,7 +18,9 @@ const LEADS = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V
 
 export function ElectrodeLab() {
   const [sel, setSel] = useState("V1");
-  const e = ELECTRODES.find((x) => x.id === sel)!;
+  const selected = ELECTRODES.find((x) => x.id === sel);
+  const e = selected ? { ...selected, leads: ["RA", "LA", "LL"].includes(selected.id) ? LEADS.filter((lead) => !((selected.id === "RA" && lead === "III") || (selected.id === "LA" && lead === "II") || (selected.id === "LL" && lead === "I"))) : selected.leads } : undefined;
+  if (!e) return null;
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
       <svg viewBox="0 0 360 600" className="mx-auto w-full max-w-[360px] rounded-lg border border-hairline bg-surface" role="img"
@@ -36,24 +39,25 @@ export function ElectrodeLab() {
         <text x="320" y="380" fontSize="9" textAnchor="end" fill="var(--muted-foreground)">Patient L</text>
         {ELECTRODES.map((x) => (
           <g key={x.id} onClick={() => setSel(x.id)} className="cursor-pointer" aria-hidden>
+            <circle cx={x.x} cy={x.y} r="22" fill="transparent" />
             <circle cx={x.x} cy={x.y} r={sel === x.id ? 11 : 8} fill={sel === x.id ? "var(--crimson)" : "var(--cyan)"} stroke="var(--background)" strokeWidth="2" />
             <text x={x.x} y={x.y - 14} fontSize="9" textAnchor="middle" fill="var(--foreground)" fontFamily="var(--font-mono)">{x.id}</text>
           </g>
         ))}
       </svg>
       <div className="min-w-0 space-y-4">
-        <div role="radiogroup" aria-label="Electrodes" className="grid grid-cols-5 gap-2">
+        <div role="group" aria-label="Electrodes" className="grid grid-cols-5 gap-2">
           {ELECTRODES.map((x) => (
-            <button key={x.id} type="button" role="radio" aria-checked={sel === x.id} onClick={() => setSel(x.id)}
-              className={`min-h-11 rounded-md border font-mono text-[12px] focus-visible:outline-2 focus-visible:outline-cyan ${sel === x.id ? "border-crimson text-foreground" : "border-hairline text-muted-foreground"}`}>
+            <Button variant="ghost" key={x.id} type="button" aria-pressed={sel === x.id} onClick={() => setSel(x.id)}
+              className={`h-auto whitespace-normal min-h-11 rounded-md border font-mono text-[12px] focus-visible:outline-2 focus-visible:outline-cyan ${sel === x.id ? "border-crimson text-foreground" : "border-hairline text-muted-foreground"}`}>
               {x.id}
-            </button>
+            </Button>
           ))}
         </div>
         <div className="rounded-lg border border-hairline bg-surface/60 p-4" aria-live="polite">
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-cyan">Electrode {e.id}</p>
           <p className="mt-2 text-foreground">{e.where}</p>
-          <p className="mt-3 text-[12.5px] text-muted-foreground">Leads using this electrode:</p>
+          <p className="mt-3 text-[12.5px] text-muted-foreground">Leads using this electrode (including reference contributions):</p>
           <ul className="mt-2 flex flex-wrap gap-1.5">
             {LEADS.map((l) => (
               <li key={l} className={`rounded border px-2 py-1 font-mono text-[11px] ${e.leads.includes(l) ? "border-cyan text-cyan" : "border-hairline text-muted-foreground opacity-50"}`}>{l}</li>

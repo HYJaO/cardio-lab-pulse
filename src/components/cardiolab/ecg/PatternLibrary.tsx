@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
 import { EcgPaper } from "./EcgPaper";
 import { ECG_PATTERNS, FINDING_LABEL, type FindingKey } from "@/lib/ecg-patterns";
@@ -7,9 +8,10 @@ const groups = [...new Set(ECG_PATTERNS.map((p) => p.group))];
 export function PatternLibrary() {
   const [pid, setPid] = useState("sinus");
   const [vid, setVid] = useState<string | undefined>();
-  const p = ECG_PATTERNS.find((x) => x.id === pid)!;
-  const v = p.variants.find((x) => x.id === vid) ?? p.variants[0];
-  const fig = useMemo(() => v.figure(), [v]);
+  const p = ECG_PATTERNS.find((x) => x.id === pid);
+  const v = p?.variants.find((x) => x.id === vid) ?? p?.variants[0];
+  const fig = useMemo(() => v?.figure(), [v]);
+  if (!p || !v || !fig) return null;
   return (
     <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
       <nav aria-label="ECG patterns" className="space-y-4">
@@ -18,10 +20,10 @@ export function PatternLibrary() {
             <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{g}</p>
             <div className="mt-1.5 flex flex-wrap gap-1.5 lg:flex-col">
               {ECG_PATTERNS.filter((x) => x.group === g).map((x) => (
-                <button key={x.id} type="button" aria-pressed={pid === x.id} onClick={() => { setPid(x.id); setVid(undefined); }}
-                  className={`min-h-11 rounded-md border px-3 text-left text-[13px] focus-visible:outline-2 focus-visible:outline-cyan ${pid === x.id ? "border-cyan text-foreground" : "border-hairline text-muted-foreground hover:text-foreground"}`}>
+                <Button variant="ghost" key={x.id} type="button" aria-pressed={pid === x.id} onClick={() => { setPid(x.id); setVid(undefined); }}
+                  className={`h-auto whitespace-normal min-h-11 rounded-md border px-3 text-left text-[13px] focus-visible:outline-2 focus-visible:outline-cyan ${pid === x.id ? "border-cyan text-foreground" : "border-hairline text-muted-foreground hover:text-foreground"}`}>
                   {x.name}
-                </button>
+                </Button>
               ))}
             </div>
           </div>
@@ -35,10 +37,10 @@ export function PatternLibrary() {
         {p.variants.length > 1 && (
           <div className="flex flex-wrap gap-2" role="group" aria-label="Variant">
             {p.variants.map((x) => (
-              <button key={x.id} type="button" aria-pressed={v.id === x.id} onClick={() => setVid(x.id)}
-                className={`min-h-11 rounded-md border px-3 font-mono text-[11px] ${v.id === x.id ? "border-crimson text-foreground" : "border-hairline text-muted-foreground"}`}>
+              <Button variant="ghost" key={x.id} type="button" aria-pressed={v.id === x.id} onClick={() => setVid(x.id)}
+                className={`h-auto whitespace-normal min-h-11 rounded-md border px-3 font-mono text-[11px] ${v.id === x.id ? "border-crimson text-foreground" : "border-hairline text-muted-foreground"}`}>
                 {x.label}
-              </button>
+              </Button>
             ))}
           </div>
         )}

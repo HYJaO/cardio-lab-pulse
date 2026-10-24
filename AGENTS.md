@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- ECG teaching signal synthesis and pattern/quiz data stay in browser-safe library modules; the existing TopicPage shell hosts all ECG stages so prior lessons remain independent.
+- Murmur lookups return a complete model or the validated normal reference; central validation keeps all consuming lesson tools type-safe without duplicating guards.
