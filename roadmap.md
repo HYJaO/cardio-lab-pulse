@@ -5,7 +5,7 @@
 - [x] Restore pre-ECG config dependency and consistent lockfile
 - [x] Audit ten cases, axis boundaries, patterns and electrode derivation; add regression tests
 - [x] Verify ECG navigation, interactions, quiz scoring, keyboard and mobile preview
-- [ ] Clean project-wide check blocked by pre-existing Heart Murmurs errors; excluded from this task by user instruction
+- [ ] Fix remaining project-wide Heart Murmurs errors and verify the preview (current request)
 
 ## Prior redesign backlog (outside ECG continuation)
 

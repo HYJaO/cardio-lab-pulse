@@ -17,7 +17,9 @@ export function MurmurPicker({
     if (!d) return;
     e.preventDefault();
     const n = (i + d + LAB_MURMURS.length) % LAB_MURMURS.length;
-    onChange(LAB_MURMURS[n].id);
+    const next = LAB_MURMURS[n];
+    if (!next) return;
+    onChange(next.id);
     refs.current[n]?.focus();
   };
   return (
