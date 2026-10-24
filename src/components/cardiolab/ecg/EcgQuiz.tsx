@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useMemo, useState } from "react";
 import { Check, X } from "lucide-react";
 import { EcgPaper } from "./EcgPaper";
@@ -30,7 +31,7 @@ export function EcgQuiz() {
             </li>
           ))}
         </ul>
-        <button type="button" onClick={reset} className="mt-5 min-h-11 rounded-md bg-cyan px-5 font-semibold text-primary-foreground">Replay quiz</button>
+        <Button variant="ghost" type="button" onClick={reset} className="mt-5 h-auto whitespace-normal min-h-11 rounded-md bg-cyan px-5 font-semibold text-primary-foreground">Replay quiz</Button>
       </div>
     );
 
@@ -52,20 +53,20 @@ export function EcgQuiz() {
             const good = answered && k === c.answer;
             const bad = answered && k === choice && k !== c.answer;
             return (
-              <button key={o} type="button" disabled={answered} aria-pressed={choice === k}
+              <Button variant="ghost" key={o} type="button" disabled={answered} aria-pressed={choice === k}
                 onClick={() => setAnswers((a) => { const n = [...a]; n[i] = k; return n; })}
-                className={`min-h-11 rounded-md border px-3.5 py-2.5 text-left text-[13.5px] focus-visible:outline-2 focus-visible:outline-cyan ${good ? "border-emerald text-foreground" : bad ? "border-crimson text-foreground" : "border-hairline text-muted-foreground enabled:hover:text-foreground"}`}>
+                className={`h-auto whitespace-normal min-h-11 rounded-md border px-3.5 py-2.5 text-left text-[13.5px] focus-visible:outline-2 focus-visible:outline-cyan ${good ? "border-emerald text-foreground" : bad ? "border-crimson text-foreground" : "border-hairline text-muted-foreground enabled:hover:text-foreground"}`}>
                 {o}
-              </button>
+              </Button>
             );
           })}
         </div>
       </fieldset>
       {!answered && (
-        <button type="button" disabled={hints[i]} onClick={() => setHints((h) => { const n = [...h]; n[i] = true; return n; })}
-          className="min-h-11 rounded-md border border-hairline px-4 text-[13px] text-amber disabled:opacity-50">
+        <Button variant="ghost" type="button" disabled={hints[i]} onClick={() => setHints((h) => { const n = [...h]; n[i] = true; return n; })}
+          className="h-auto whitespace-normal min-h-11 rounded-md border border-hairline px-4 text-[13px] text-amber disabled:opacity-50">
           {hints[i] ? "Hint used" : "Show hint"}
-        </button>
+        </Button>
       )}
       {hints[i] && <p className="text-[13px] text-amber">Hint: {c.hint}</p>}
       {answered && (
@@ -79,12 +80,12 @@ export function EcgQuiz() {
             ))}
           </dl>
           <p className="mt-2 text-[13px] text-foreground">{c.takeaway}</p>
-          <button type="button" onClick={() => (i + 1 < ECG_QUIZ.length ? setI(i + 1) : setDone(true))} className="mt-3 min-h-11 rounded-md bg-cyan px-5 font-semibold text-primary-foreground">
+          <Button variant="ghost" type="button" onClick={() => (i + 1 < ECG_QUIZ.length ? setI(i + 1) : setDone(true))} className="mt-3 h-auto whitespace-normal min-h-11 rounded-md bg-cyan px-5 font-semibold text-primary-foreground">
             {i + 1 < ECG_QUIZ.length ? "Next case" : "See final score"}
-          </button>
+          </Button>
         </div>
       )}
-      <button type="button" onClick={reset} className="block font-mono text-[11px] text-muted-foreground underline">Reset quiz</button>
+      <Button variant="ghost" type="button" onClick={reset} className="block font-mono text-[11px] text-muted-foreground underline">Reset quiz</Button>
     </div>
   );
 }

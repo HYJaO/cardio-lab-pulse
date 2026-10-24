@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import { useMemo, useRef, useState } from "react";
 import { EcgPaper } from "./EcgPaper";
 import {
@@ -105,15 +106,15 @@ export function AxisExplorer() {
             onChange={(e) => { setAxis(Number(e.target.value)); setResult(null); }} className="mt-3 w-full" />
           <p className="mt-2 font-semibold text-foreground">{AXIS_LABEL[cls]}</p>
           {note && <p className="mt-1 text-[12.5px] text-amber">{note}</p>}
-          <p className="mt-2 font-mono text-[10.5px] text-muted-foreground">Normal −30° to +90° · LAD −30° to −90° · RAD +90° to +180° · Extreme −90° to −180°</p>
+          <p className="mt-2 font-mono text-[10.5px] text-muted-foreground">Normal −30° ≤ axis ≤ +90° · LAD −90° ≤ axis < −30° · RAD +90° < axis ≤ +180° · Extreme −180° < axis < −90°; ±180° assigned to RAD.</p>
         </div>
 
         <div className="flex flex-wrap gap-2">
           {PRESETS.map(([label, v]) => (
-            <button key={label} type="button" onClick={() => { setAxis(v); setResult(null); }}
-              className="min-h-11 rounded-md border border-hairline px-3 font-mono text-[11px] text-muted-foreground hover:border-cyan hover:text-foreground focus-visible:outline-2 focus-visible:outline-cyan">
+            <Button variant="ghost" key={label} type="button" onClick={() => { setAxis(v); setResult(null); }}
+              className="h-auto whitespace-normal min-h-11 rounded-md border border-hairline px-3 font-mono text-[11px] text-muted-foreground hover:border-cyan hover:text-foreground focus-visible:outline-2 focus-visible:outline-cyan">
               {label}
-            </button>
+            </Button>
           ))}
         </div>
       </div>
@@ -154,9 +155,9 @@ export function AxisExplorer() {
             </p>
           )}
           <div className="mt-3 flex flex-wrap gap-2">
-            <button type="button" onClick={() => setResult(challenge?.check(a) ?? false)} className="min-h-11 rounded-md bg-cyan px-4 text-[13px] font-semibold text-primary-foreground">Check</button>
-            <button type="button" disabled={!result} onClick={() => { setCi((ci + 1) % CHALLENGES.length); setResult(null); }} className="min-h-11 rounded-md border border-hairline px-4 text-[13px] text-foreground disabled:opacity-40">Next challenge</button>
-            <button type="button" onClick={() => { setCi(0); setAxis(60); setResult(null); }} className="min-h-11 rounded-md border border-hairline px-4 text-[13px] text-muted-foreground">Reset</button>
+            <Button variant="ghost" type="button" onClick={() => setResult(challenge?.check(a) ?? false)} className="h-auto whitespace-normal min-h-11 rounded-md bg-cyan px-4 text-[13px] font-semibold text-primary-foreground">Check</Button>
+            <Button variant="ghost" type="button" disabled={!result} onClick={() => { setCi((ci + 1) % CHALLENGES.length); setResult(null); }} className="h-auto whitespace-normal min-h-11 rounded-md border border-hairline px-4 text-[13px] text-foreground disabled:opacity-40">Next challenge</Button>
+            <Button variant="ghost" type="button" onClick={() => { setCi(0); setAxis(60); setResult(null); }} className="h-auto whitespace-normal min-h-11 rounded-md border border-hairline px-4 text-[13px] text-muted-foreground">Reset</Button>
           </div>
         </div>
       </div>

@@ -19,7 +19,7 @@ describe("ECG teaching rules", () => {
     expect(scoreAnswers(keys.map((k, i) => i === 0 ? (k + 1) % 4 : k), keys)).toBe(9);
   });
   test("axis boundaries have explicit ownership", () => {
-    for (const [angle, cls] of [[-30, "normal"], [90, "normal"], [-31, "lad"], [-90, "lad"], [91, "rad"], [180, "rad"], [-180, "rad"], [-91, "extreme"], [-179, "extreme"] as const) expect(classifyAxis(angle)).toBe(cls);
+    for (const [angle, cls] of [[-30, "normal"], [90, "normal"], [-31, "lad"], [-90, "lad"], [91, "rad"], [180, "rad"], [-180, "rad"], [-91, "extreme"], [-179, "extreme"]) expect(classifyAxis(angle)).toBe(cls);
   });
   test("all six standard lead orientations use cosine projection", () => {
     expect(LIMB_LEADS.map(l => l.angle)).toEqual([0, 60, 120, -150, -30, 90]);
