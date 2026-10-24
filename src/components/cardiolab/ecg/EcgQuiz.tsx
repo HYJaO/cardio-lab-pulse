@@ -10,11 +10,12 @@ export function EcgQuiz() {
   const [hints, setHints] = useState<boolean[]>([]);
   const [done, setDone] = useState(false);
   const c = ECG_QUIZ[i];
-  const fig = useMemo(() => getFigure(c.figure.pattern, c.figure.variant), [c]);
+  const fig = useMemo(() => c ? getFigure(c.figure.pattern, c.figure.variant) : undefined, [c]);
   const choice = answers[i];
   const answered = choice !== undefined;
   const score = scoreAnswers(answers, ECG_QUIZ.map((q) => q.answer));
   const reset = () => { setI(0); setAnswers([]); setHints([]); setDone(false); };
+  if (!c || !fig) return null;
 
   if (done)
     return (

@@ -203,12 +203,15 @@ export function modify(
   c: Complex,
   m: { st?: number; stShape?: StShape; tAmp?: number; tAt?: number; tW?: number; u?: Wave },
 ): Complex {
+  const st = m.st ?? c.st;
+  const stShape = m.stShape ?? c.stShape;
+  const u = m.u ?? c.u;
   return {
     ...c,
-    st: m.st ?? c.st,
-    stShape: m.stShape ?? c.stShape,
+    ...(st === undefined ? {} : { st }),
+    ...(stShape === undefined ? {} : { stShape }),
     t: { at: m.tAt ?? c.t.at, amp: m.tAmp ?? c.t.amp, w: m.tW ?? c.t.w },
-    u: m.u ?? c.u,
+    ...(u === undefined ? {} : { u }),
   };
 }
 

@@ -111,7 +111,7 @@ function sinusFig(rate: number): EcgFigure {
 
 function axisDevFig(axis: number, label: string): EcgFigure {
   const timing = sinusTiming(75, 3);
-  const tr = (id: LeadId) => makeTrace(id, timing, () => limbComplex(projection(axis, limbAngle(id)!)));
+  const tr = (id: LeadId) => makeTrace(id, timing, () => limbComplex(projection(axis, limbAngle(id) ?? 0)));
   return stripFigure([tr("I"), tr("II"), tr("aVF")], `Leads I, II and aVF showing ${label} (axis ${axis} degrees).`);
 }
 
@@ -130,7 +130,7 @@ function mobitz1Fig(): EcgFigure {
     const pc = 0.25 + k * 0.75;
     pTimes.push(pc);
     const g = k % 4;
-    if (g < 3) qrsTimes.push(pc - 0.05 + prs[g]);
+    if (g < 3) qrsTimes.push(pc - 0.05 + (prs[g] ?? 0.16));
   }
   return stripFigure(
     [leadII({ duration: 6, pTimes, qrsTimes }, II())],
@@ -180,7 +180,7 @@ function afFig(): EcgFigure {
   let t = 0.3;
   for (let i = 0; t < 5.8; i++) {
     qrsTimes.push(t);
-    t += rr[i % rr.length];
+    t += rr[i % rr.length] ?? 0.7;
   }
   const fib = (x: number) =>
     0.05 * Math.sin(2 * Math.PI * 6.3 * x) + 0.035 * Math.sin(2 * Math.PI * 8.7 * x + 1) + 0.025 * Math.sin(2 * Math.PI * 11.1 * x + 2);
@@ -465,7 +465,7 @@ export const ECG_PATTERNS: EcgPattern[] = [
       "Septal V1–V2 and anterior V3–V4 = LAD; lateral I, aVL, V5–V6 = LCx; inferior II, III, aVF = usually RCA. Inferior MI with hypotension → check right-sided leads; avoid nitrates.",
     variants: (["septal", "anterior", "lateral", "inferior"] as Region[]).map((r) => ({
       id: r,
-      label: r[0].toUpperCase() + r.slice(1),
+      label: r.charAt(0).toUpperCase() + r.slice(1),
       figure: () => stemiFigure(r),
       findings: {
         rate: "75 /min sinus",
@@ -473,6 +473,15 @@ export const ECG_PATTERNS: EcgPattern[] = [
         distribution: `${REGIONS[r].leads.join(", ")} (${REGIONS[r].artery})${REGIONS[r].recip.length ? `; reciprocal ↓ in ${REGIONS[r].recip.join(", ")}` : ""}`,
       },
     })),
+  },
+  {
+    id: "ischemia",
+    name: "Subendocardial ischemia",
+    group: "Ischemia",
+    summary: "Horizontal or downsloping ST depression and T inversion suggest ischemia in the appropriate clinical context.",
+    mechanism: "Subendocardial injury shifts the ST vector away from surface leads; altered repolarization can invert T waves.",
+    trap: "ST depression alone does not reliably localize the culprit artery. Distinguish primary ischemia from reciprocal STEMI changes and secondary changes in bundle-branch block.",
+    variants: [{ id: "a", label: "Lateral leads", figure: () => twelveLead((lead) => ["I", "aVL", "V5", "V6"].includes(lead) ? modify(normalComplex(lead), { st: -0.15, tAmp: -0.25 }) : normalComplex(lead), "Lateral ST depression and T inversion in I, aVL, V5 and V6; schematic subendocardial ischemia."), findings: { rhythm: "Regular sinus", morphology: "Horizontal ST depression and T inversion", distribution: "I, aVL, V5–V6; depression does not identify a single culprit artery" } }],
   },
   {
     id: "hyperk",
@@ -531,8 +540,10 @@ export const ECG_PATTERNS: EcgPattern[] = [
 ];
 
 export function getFigure(patternId: string, variantId?: string): EcgFigure {
-  const p = ECG_PATTERNS.find((x) => x.id === patternId)!;
-  return (p.variants.find((v) => v.id === variantId) ?? p.variants[0]).figure();
+  const p = ECG_PATTERNS.find((x) => x.id === patternId);
+  const variant = p?.variants.find((v) => v.id === variantId) ?? p?.variants[0];
+  if (!variant) throw new Error(`Unknown ECG pattern: ${patternId}`);
+  return variant.figure();
 }
 
 /* ---------- quiz ---------- */

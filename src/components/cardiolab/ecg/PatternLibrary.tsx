@@ -7,9 +7,10 @@ const groups = [...new Set(ECG_PATTERNS.map((p) => p.group))];
 export function PatternLibrary() {
   const [pid, setPid] = useState("sinus");
   const [vid, setVid] = useState<string | undefined>();
-  const p = ECG_PATTERNS.find((x) => x.id === pid)!;
-  const v = p.variants.find((x) => x.id === vid) ?? p.variants[0];
-  const fig = useMemo(() => v.figure(), [v]);
+  const p = ECG_PATTERNS.find((x) => x.id === pid);
+  const v = p?.variants.find((x) => x.id === vid) ?? p?.variants[0];
+  const fig = useMemo(() => v?.figure(), [v]);
+  if (!p || !v || !fig) return null;
   return (
     <div className="grid gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
       <nav aria-label="ECG patterns" className="space-y-4">

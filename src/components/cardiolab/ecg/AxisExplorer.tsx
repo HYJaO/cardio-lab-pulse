@@ -49,9 +49,12 @@ export function AxisExplorer() {
   const note = axisBoundaryNote(a);
   const fig = useMemo(() => axisFigure(a), [a]);
   const [vx, vy] = pt(a, R * 0.88);
+  const challenge = CHALLENGES[ci] ?? CHALLENGES[0];
 
   const fromPointer = (e: React.PointerEvent) => {
-    const r = svgRef.current!.getBoundingClientRect();
+    const svg = svgRef.current;
+    if (!svg) return;
+    const r = svg.getBoundingClientRect();
     const x = ((e.clientX - r.left) / r.width) * 300 - C;
     const y = ((e.clientY - r.top) / r.height) * 300 - C;
     setAxis(normalizeAngle(Math.round((Math.atan2(y, x) * 180) / Math.PI)));
@@ -144,14 +147,14 @@ export function AxisExplorer() {
 
         <div className="rounded-lg border border-hairline bg-surface/60 p-4" aria-live="polite">
           <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-cyan">Challenge {ci + 1} / {CHALLENGES.length}</p>
-          <p className="mt-2 text-foreground">{CHALLENGES[ci].prompt}</p>
+          <p className="mt-2 text-foreground">{challenge?.prompt}</p>
           {result !== null && (
             <p className={`mt-2 text-[13px] ${result ? "text-emerald" : "text-crimson"}`}>
-              {result ? `Correct — ${a}° works.` : `Not yet (${a}°). Hint: ${CHALLENGES[ci].hint}`}
+              {result ? `Correct — ${a}° works.` : `Not yet (${a}°). Hint: ${challenge?.hint}`}
             </p>
           )}
           <div className="mt-3 flex flex-wrap gap-2">
-            <button type="button" onClick={() => setResult(CHALLENGES[ci].check(a))} className="min-h-11 rounded-md bg-cyan px-4 text-[13px] font-semibold text-primary-foreground">Check</button>
+            <button type="button" onClick={() => setResult(challenge?.check(a) ?? false)} className="min-h-11 rounded-md bg-cyan px-4 text-[13px] font-semibold text-primary-foreground">Check</button>
             <button type="button" disabled={!result} onClick={() => { setCi((ci + 1) % CHALLENGES.length); setResult(null); }} className="min-h-11 rounded-md border border-hairline px-4 text-[13px] text-foreground disabled:opacity-40">Next challenge</button>
             <button type="button" onClick={() => { setCi(0); setAxis(60); setResult(null); }} className="min-h-11 rounded-md border border-hairline px-4 text-[13px] text-muted-foreground">Reset</button>
           </div>

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 type E = { id: string; x: number; y: number; where: string; leads: string[] };
-const ELECTRODES: E[] = [
+export const ELECTRODES: E[] = [
   { id: "RA", x: 35, y: 335, where: "Right wrist (inner forearm). Clinical variant: proximal right arm or right shoulder for monitoring/exercise testing — this changes limb-lead amplitudes slightly.", leads: ["I", "II", "aVR"] },
   { id: "LA", x: 325, y: 335, where: "Left wrist (inner forearm). Variant: proximal left arm or shoulder.", leads: ["I", "III", "aVL"] },
   { id: "RL", x: 145, y: 565, where: "Right ankle. Ground/reference electrode — it forms no lead. Variant: lower abdomen.", leads: [] },
@@ -17,7 +17,9 @@ const LEADS = ["I", "II", "III", "aVR", "aVL", "aVF", "V1", "V2", "V3", "V4", "V
 
 export function ElectrodeLab() {
   const [sel, setSel] = useState("V1");
-  const e = ELECTRODES.find((x) => x.id === sel)!;
+  const selected = ELECTRODES.find((x) => x.id === sel);
+  const e = selected ? { ...selected, leads: ["RA", "LA", "LL"].includes(selected.id) ? LEADS.filter((lead) => !((selected.id === "RA" && lead === "III") || (selected.id === "LA" && lead === "II") || (selected.id === "LL" && lead === "I"))) : selected.leads } : undefined;
+  if (!e) return null;
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
       <svg viewBox="0 0 360 600" className="mx-auto w-full max-w-[360px] rounded-lg border border-hairline bg-surface" role="img"
