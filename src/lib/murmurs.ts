@@ -273,8 +273,8 @@ export const MURMURS: Murmur[] = [
 
 export const LAB_MURMURS = MURMURS.filter((m) => m.inLab);
 export function getMurmur(id: MurmurId): Murmur {
-  const murmur = MURMURS.find((m) => m.id === id) ?? MURMURS.find((m) => m.id === "normal");
-  if (!murmur) throw new Error("The murmur library must contain its normal reference.");
+  const murmur = MURMURS.find((m) => m.id === id) ?? MURMURS[0];
+  if (!murmur) throw new Error("The murmur library must contain its reference model.");
   return murmur;
 }
 
