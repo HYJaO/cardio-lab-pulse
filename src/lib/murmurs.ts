@@ -272,11 +272,7 @@ export const MURMURS: Murmur[] = [
 ];
 
 export const LAB_MURMURS = MURMURS.filter((m) => m.inLab);
-export function getMurmur(id: MurmurId): Murmur {
-  const murmur = MURMURS.find((m) => m.id === id) ?? MURMURS.find((m) => m.id === "normal");
-  if (!murmur) throw new Error("The murmur library must contain its normal reference.");
-  return murmur;
-}
+export const getMurmur = (id: MurmurId) => MURMURS.find((m) => m.id === id) ?? MURMURS[0];
 
 export const LANDMARKS: { id: LandmarkId; name: string; place: string; x: number; y: number }[] = [
   { id: "aortic", name: "Aortic", place: "Right upper sternal border, 2nd intercostal space", x: 128, y: 120 },
