@@ -52,7 +52,7 @@ export function MurmurTimingLab({
         >
           <rect x={S1_T * W} y={0} width={(S2_T - S1_T) * W} height={H} fill="var(--cyan)" opacity="0.05" />
           <line x1={0} x2={W} y1={H / 2} y2={H / 2} stroke="var(--hairline)" />
-          {m.phase !== "none" && (
+          {m.envelope && m.phase !== "none" && (
             <path d={envelopePath(m, W, H)} fill="none" stroke={color} strokeOpacity="0.45" strokeDasharray="4 4" />
           )}
           <path d={tracePath(m, W, H)} fill="none" stroke={color} strokeWidth="1.2" />
