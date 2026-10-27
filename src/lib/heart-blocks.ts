@@ -193,7 +193,7 @@ export const HB_QUIZ: QuizQ[] = [
   },
   {
     id: "q3", kind: "mobitz2", rate: 72,
-    vignette: "A 68-year-old with prior anterior MI reports lightheadedness. Narrow? No — QRS is wide.",
+    vignette: "A 68-year-old with prior anterior MI reports lightheadedness. His QRS is wide.",
     question: "What is the most appropriate interpretation?",
     options: ["Mobitz II second-degree AV block", "Mobitz I", "Blocked premature atrial complex", "First-degree AV block"],
     answer: 0,
