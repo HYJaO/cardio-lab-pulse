@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TopicsAtherosclerosisRouteImport } from './routes/topics.atherosclerosis'
 import { Route as TopicsCardiacCycleRouteImport } from './routes/topics.cardiac-cycle'
 import { Route as TopicsEcgPatternsRouteImport } from './routes/topics.ecg-patterns'
+import { Route as TopicsHeartBlocksRouteImport } from './routes/topics.heart-blocks'
 import { Route as TopicsHeartFailureRouteImport } from './routes/topics.heart-failure'
 import { Route as TopicsHeartMurmursRouteImport } from './routes/topics.heart-murmurs'
 import { Route as TopicsPvLoopsRouteImport } from './routes/topics.pv-loops'
@@ -37,6 +38,11 @@ const TopicsEcgPatternsRoute = TopicsEcgPatternsRouteImport.update({
   path: '/topics/ecg-patterns',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TopicsHeartBlocksRoute = TopicsHeartBlocksRouteImport.update({
+  id: '/topics/heart-blocks',
+  path: '/topics/heart-blocks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TopicsHeartFailureRoute = TopicsHeartFailureRouteImport.update({
   id: '/topics/heart-failure',
   path: '/topics/heart-failure',
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/topics/atherosclerosis': typeof TopicsAtherosclerosisRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
   '/topics/ecg-patterns': typeof TopicsEcgPatternsRoute
+  '/topics/heart-blocks': typeof TopicsHeartBlocksRoute
   '/topics/heart-failure': typeof TopicsHeartFailureRoute
   '/topics/heart-murmurs': typeof TopicsHeartMurmursRoute
   '/topics/pv-loops': typeof TopicsPvLoopsRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/topics/atherosclerosis': typeof TopicsAtherosclerosisRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
   '/topics/ecg-patterns': typeof TopicsEcgPatternsRoute
+  '/topics/heart-blocks': typeof TopicsHeartBlocksRoute
   '/topics/heart-failure': typeof TopicsHeartFailureRoute
   '/topics/heart-murmurs': typeof TopicsHeartMurmursRoute
   '/topics/pv-loops': typeof TopicsPvLoopsRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/topics/atherosclerosis': typeof TopicsAtherosclerosisRoute
   '/topics/cardiac-cycle': typeof TopicsCardiacCycleRoute
   '/topics/ecg-patterns': typeof TopicsEcgPatternsRoute
+  '/topics/heart-blocks': typeof TopicsHeartBlocksRoute
   '/topics/heart-failure': typeof TopicsHeartFailureRoute
   '/topics/heart-murmurs': typeof TopicsHeartMurmursRoute
   '/topics/pv-loops': typeof TopicsPvLoopsRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/topics/atherosclerosis'
     | '/topics/cardiac-cycle'
     | '/topics/ecg-patterns'
+    | '/topics/heart-blocks'
     | '/topics/heart-failure'
     | '/topics/heart-murmurs'
     | '/topics/pv-loops'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/topics/atherosclerosis'
     | '/topics/cardiac-cycle'
     | '/topics/ecg-patterns'
+    | '/topics/heart-blocks'
     | '/topics/heart-failure'
     | '/topics/heart-murmurs'
     | '/topics/pv-loops'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/topics/atherosclerosis'
     | '/topics/cardiac-cycle'
     | '/topics/ecg-patterns'
+    | '/topics/heart-blocks'
     | '/topics/heart-failure'
     | '/topics/heart-murmurs'
     | '/topics/pv-loops'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   TopicsAtherosclerosisRoute: typeof TopicsAtherosclerosisRoute
   TopicsCardiacCycleRoute: typeof TopicsCardiacCycleRoute
   TopicsEcgPatternsRoute: typeof TopicsEcgPatternsRoute
+  TopicsHeartBlocksRoute: typeof TopicsHeartBlocksRoute
   TopicsHeartFailureRoute: typeof TopicsHeartFailureRoute
   TopicsHeartMurmursRoute: typeof TopicsHeartMurmursRoute
   TopicsPvLoopsRoute: typeof TopicsPvLoopsRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TopicsEcgPatternsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/topics/heart-blocks': {
+      id: '/topics/heart-blocks'
+      path: '/topics/heart-blocks'
+      fullPath: '/topics/heart-blocks'
+      preLoaderRoute: typeof TopicsHeartBlocksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/topics/heart-failure': {
       id: '/topics/heart-failure'
       path: '/topics/heart-failure'
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   TopicsAtherosclerosisRoute: TopicsAtherosclerosisRoute,
   TopicsCardiacCycleRoute: TopicsCardiacCycleRoute,
   TopicsEcgPatternsRoute: TopicsEcgPatternsRoute,
+  TopicsHeartBlocksRoute: TopicsHeartBlocksRoute,
   TopicsHeartFailureRoute: TopicsHeartFailureRoute,
   TopicsHeartMurmursRoute: TopicsHeartMurmursRoute,
   TopicsPvLoopsRoute: TopicsPvLoopsRoute,

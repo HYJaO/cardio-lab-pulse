@@ -50,6 +50,7 @@ const TOPICS: Topic[] = [
     minutes: 26,
     taxonomy: "usmle-trap",
     preview: "block",
+    href: "/topics/heart-blocks",
   },
   {
     title: "Starling Curve",
@@ -78,7 +79,7 @@ export function HighYieldTopics() {
       id="topics"
       eyebrow="Core Concepts"
       title="High-Yield Cardiovascular"
-      description="Every concept is tagged with a consistent taxonomy with exactly one primary tag, so mechanism, presentation and exam traps stay unambiguous. The Cardiac Cycle, Pressure–Volume Loop, Atherosclerosis, Heart Failure and Heart Murmurs labs are live; the remaining labs are in development."
+      description="Every concept is tagged with a consistent taxonomy with exactly one primary tag, so mechanism, presentation and exam traps stay unambiguous. The Cardiac Cycle, Pressure–Volume Loop, Atherosclerosis, Heart Failure, Heart Murmurs and Heart Blocks labs are live; the remaining labs are in development."
       className="border-y border-border/50 bg-surface/25"
     >
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
