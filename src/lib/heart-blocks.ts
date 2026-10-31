@@ -172,7 +172,7 @@ export type QuizQ = {
   why: string[];
 };
 
-export const HB_QUIZ: QuizQ[] = [
+const RAW_QUIZ: QuizQ[] = [
   {
     id: "q1", kind: "first", rate: 72,
     vignette: "A 45-year-old woman taking a beta-blocker has a routine ECG before minor surgery. She is asymptomatic.",
@@ -264,6 +264,15 @@ export const HB_QUIZ: QuizQ[] = [
     why: ["Correct: complete heart block = more Ps than QRSs and no consistent PR.", "Wide QRS occurs with many conduction disorders.", "Bradycardia is nonspecific.", "Buried Ps also occur with PACs or fast rates."],
   },
 ];
+
+/** Rotate choices so the keyed answer lands in varied positions (written with the key first). */
+const SLOTS = [2, 0, 3, 1, 2, 3, 1, 0, 3, 1];
+export const HB_QUIZ: QuizQ[] = RAW_QUIZ.map((q, i) => {
+  const n = q.options.length;
+  const shift = (SLOTS[i] ?? 0) % n;
+  const rot = <T,>(a: T[]) => a.map((_, k) => a[(k - shift + n) % n] as T);
+  return { ...q, options: rot(q.options), why: rot(q.why), answer: (q.answer + shift) % n };
+});
 
 export function scoreQuiz(answers: (number | undefined)[]): number {
   return HB_QUIZ.reduce((n, q, i) => n + (answers[i] === q.answer ? 1 : 0), 0);

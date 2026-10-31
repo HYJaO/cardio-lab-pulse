@@ -34,3 +34,8 @@ describe("heart blocks", () => {
     for (const c of READ_CASES) expect(c.steps.map((s) => s.id)).toEqual(["rate", "rhythm", "p", "pr", "qrs", "dx"]);
   });
 });
+test("quiz answers are spread across positions", () => {
+  expect(new Set(HB_QUIZ.map((q) => q.answer)).size).toBe(4);
+  expect(HB_QUIZ[0].why[HB_QUIZ[0].answer]).toMatch(/^Correct/);
+  for (const q of HB_QUIZ) expect(q.why[q.answer]).toMatch(/^Correct/);
+});
